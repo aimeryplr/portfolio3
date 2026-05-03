@@ -1,0 +1,16 @@
+---
+import Image from "astro/components/Image.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import diverBackground from "../images/diver-background.png";
+import { Button } from "@heroui/react/button";
+---
+
+<BaseLayout title="Page Introuvable">
+    <Image class={"object-cover w-full h-svh opacity-80 max-w-none"} loading={'eager'} src={diverBackground}
+           alt={'diver background'}/>
+    <div class="absolute left-1/2 top-1/2 -translate-1/2 p-5 flex flex-col gap-4 rounded items-center ">
+        <h1 class="text-4xl font-bold">404 - Page introuvable</h1>
+        <h2 class="text-2xl">Vous etes perdu dans l'ocean</h2>
+        <a href="/"><Button>Retourner à l'accueil</Button></a>
+    </div>
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {emptyCodingHoursProps} from "../components/CodingHours/props.ts";
+import Image from "astro/components/Image.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import diverBackground from "../images/diver-background.png";
+import CondingHours from "../components/CodingHours/CondingHours.astro";
+import CodingHoursList from "../components/CodingHours/CodingHoursList.astro";
+import WaveSvg from "../icons/wave.svg"
+import {faArrowDown} from "@fortawesome/free-solid-svg-icons";
+---
+
+<BaseLayout>
+    <section class="relative w-full overflow-x-hidden">
+        <Image class={"object-cover w-full h-svh opacity-80 max-w-none"} loading={'eager'} src={diverBackground}
+               alt={'diver background'}/>
+        <div class="absolute inset-20 flex justify-between">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold">DÉVELOPPEUR FULL STACK</h1>
+                    <h2 class="text-xl font-bold">Aimery PELLERIN</h2>
+                </div>
+                <p class="w-120">Au fil des années, j'ai développé un véritable intérêt pour l'exploration de nouveaux
+                    langages de programmation et l'utilisation d'applications innovantes,
+                    stimulant ainsi ma créativité et nourrissant ma curiosité. Actuellement, je poursuis l'apprentissage
+                    de ces compétences à l'IUT 2 de Grenoble.</p>
+            </div>
+            <div class="flex flex-col gap-4">
+                <CondingHours server:defer>
+                    <CodingHoursList codingHours={emptyCodingHoursProps} slot={'fallback'}/>
+                </CondingHours>
+            </div>
+        </div>
+        <div class="flex flex-col items-center gap-2 absolute bottom-1/3 left-1/2 -translate-x-1/2">
+            <p class="text-xl font-bold">Projets</p>
+            <FontAwesomeIcon icon={faArrowDown} className='w-6 h-6'/>
+        </div>
+        <WaveSvg class={"bottom-0 translate-y-[-99%] text-background w-full h-auto"}/>
+    </section>
+    <section>
+
+    </section>
+</BaseLayout>

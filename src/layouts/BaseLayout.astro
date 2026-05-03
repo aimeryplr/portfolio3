@@ -1,0 +1,23 @@
+---
+import { Font } from "astro:assets";
+import '@styles/global.css'
+
+interface Props {
+  title?: string;
+}
+
+const {title = 'Aimery'} = Astro.props
+---
+
+<html lang="fr" class="dark" data-theme="dark">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="/favicon.png"/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="generator" content={Astro.generator}/>
+    <Font cssVariable="--font-inter" preload />
+    <title>{title}</title>
+</head>
+<body class="bg-background w-full min-h-svh">
+    <slot/>
+</body>

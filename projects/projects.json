@@ -1,0 +1,37 @@
+[
+  {
+    "name": "K-HUBS",
+    "technologies": ["react", "nestjs", "docker", "mongodb"],
+    "people": 4,
+    "website": "https://app.k-hubs.com",
+    "type": "professional"
+  },
+  {
+    "name": "Koridor",
+    "technologies": ["react", "socket-io"],
+    "people": 1,
+    "website": "https://app.k-hubs.com",
+    "type": "professional"
+  },
+  {
+    "name": "Nomadio",
+    "technologies": ["graphql", "kotlin"],
+    "people": 3,
+    "website": "https://morgannas.myds.me/nomadio/",
+    "type": "personal"
+  },
+  {
+    "name": "Cyber-Factory",
+    "technologies": ["roblox", "typescript"],
+    "people": 3,
+    "code": "https://github.com/aimeryplr/Cyber-Factory",
+    "type": "personal"
+  },
+  {
+    "name": "Sniper Bot",
+    "technologies": ["cryptocurrency", "react"],
+    "people": 1,
+    "code": "https://github.com/aimeryplr/sniper-bot-ETH",
+    "type": "personal"
+  }
+]

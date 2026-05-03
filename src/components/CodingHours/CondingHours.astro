@@ -1,0 +1,28 @@
+---
+import {fetchTSCodingHours} from "../../services/wakatime.ts";
+import CodingHoursList from "./CodingHoursList.astro";
+import {Technologies} from "../../enum/technologies.ts";
+import type {ComponentProps} from "astro/types";
+
+const TSCondingHours = await fetchTSCodingHours();
+
+const codingHours: ComponentProps<typeof CodingHoursList>['codingHours'] = [
+  {
+    technology: Technologies.TYPESCRIPT,
+    hours: TSCondingHours.hours,
+    percent: TSCondingHours.percent
+  },
+  {
+    technology: Technologies.REACT,
+    hours: 567,
+    percent: 62,
+  },
+  {
+    technology: Technologies.NESTJS,
+    hours: 228,
+    percent: 32
+  }
+]
+---
+
+<CodingHoursList codingHours={codingHours}/>

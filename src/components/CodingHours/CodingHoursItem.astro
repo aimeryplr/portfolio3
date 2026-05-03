@@ -1,0 +1,26 @@
+---
+import AnimatedProgressCircle from "../AnimatedProgressCircle.tsx";
+import CountUp from "../CountUp.tsx";
+import type {Technologies} from "../../enum/technologies.ts";
+import LanguageIcon from "../LanguageIcon.astro";
+
+/**
+ * @prop percent 0 to 100
+ */
+interface Props {
+  hours: number;
+  percent: number;
+  technology: Technologies;
+}
+
+const {hours, percent, technology} = Astro.props;
+---
+
+<div class="flex items-center justify-end gap-2">
+    <LanguageIcon technology={technology} class={"w-6 h-6"}/>
+    <p class="font-bold text-xl">
+        <CountUp to={hours} client:load/>
+        h
+    </p>
+    <AnimatedProgressCircle color="accent" size={"lg"} percent={percent} client:load/>
+</div>

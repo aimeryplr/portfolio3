@@ -1,0 +1,12 @@
+---
+import type {ComponentProps} from "astro/types";
+import CodingHoursItem from "./CodingHoursItem.astro";
+
+interface Props {
+  codingHours: ComponentProps<typeof CodingHoursItem>[]
+}
+---
+
+{Astro.props.codingHours.map((item) => (
+  <CodingHoursItem {...item} />
+))}
