@@ -14,12 +14,12 @@ const codingHours: ComponentProps<typeof CodingHoursList>['codingHours'] = [
   },
   {
     technology: Technologies.REACT,
-    hours: 567,
+    hours: Math.round(TSCondingHours.hours * .62),
     percent: 62,
   },
   {
     technology: Technologies.NESTJS,
-    hours: 228,
+    hours: Math.round(TSCondingHours.hours * .23),
     percent: 32
   }
 ]

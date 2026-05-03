@@ -10,4 +10,9 @@ export default defineConfig([
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   eslintConfigPrettier,
+  {
+    rules: {
+      "indent": ['error', 2]
+    }
+  }
 ]);

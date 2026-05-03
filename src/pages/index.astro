@@ -8,6 +8,12 @@ import CondingHours from "../components/CodingHours/CondingHours.astro";
 import CodingHoursList from "../components/CodingHours/CodingHoursList.astro";
 import WaveSvg from "../icons/wave.svg"
 import {faArrowDown} from "@fortawesome/free-solid-svg-icons";
+import {getCollection} from "astro:content";
+import {ProjectType, ProjectTypeNames} from "../enum/projects.ts";
+import type {Project} from "../types/project.schema.ts";
+import ProjectPreview from '../components/Projects/ProjectPreview.astro';
+
+const projects = await getCollection('projects');
 ---
 
 <BaseLayout>
@@ -37,7 +43,18 @@ import {faArrowDown} from "@fortawesome/free-solid-svg-icons";
         </div>
         <WaveSvg class={"bottom-0 translate-y-[-99%] text-background w-full h-auto"}/>
     </section>
-    <section>
+    <section class="flex flex-col gap-8 items-center">
+      {Object.values(ProjectType).map((projectType) => {
+        const filteredProjects = projects.filter((project) => project.data.type === projectType);
+        const sectionTitle = ProjectTypeNames[projectType]
 
+        return (
+          <div class="w-260 flex flex-col gap-8">
+            <h2 class="text-2xl font-bold">{sectionTitle}</h2>
+            {filteredProjects.map((project) => <ProjectPreview project={project.data} />)}
+          </div>
+        )
+      })}
     </section>
+    <footer class="h-8 w-full" />
 </BaseLayout>

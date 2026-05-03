@@ -1,36 +1,46 @@
 [
   {
+    "id": "K-HUBS",
     "name": "K-HUBS",
     "technologies": ["react", "nestjs", "docker", "mongodb"],
     "people": 4,
+    "preview": "./k-hubs/preview.png",
     "website": "https://app.k-hubs.com",
     "type": "professional"
   },
   {
+    "id": "Koridor",
     "name": "Koridor",
     "technologies": ["react", "socket-io"],
     "people": 1,
+    "preview": "./koridor/preview.png",
     "website": "https://app.k-hubs.com",
     "type": "professional"
   },
   {
+    "id": "Nomadio",
     "name": "Nomadio",
     "technologies": ["graphql", "kotlin"],
     "people": 3,
+    "preview": "./nomadio/preview.png",
     "website": "https://morgannas.myds.me/nomadio/",
     "type": "personal"
   },
   {
+    "id": "Cyber-Factory",
     "name": "Cyber-Factory",
-    "technologies": ["roblox", "typescript"],
+    "technologies": ["roblox", "ts"],
     "people": 3,
+    "preview": "./cyber-factory/preview.png",
     "code": "https://github.com/aimeryplr/Cyber-Factory",
     "type": "personal"
   },
   {
+    "id": "Sniper Bot",
     "name": "Sniper Bot",
     "technologies": ["cryptocurrency", "react"],
     "people": 1,
+    "preview": "./sniper-bot/preview.png",
     "code": "https://github.com/aimeryplr/sniper-bot-ETH",
     "type": "personal"
   }
