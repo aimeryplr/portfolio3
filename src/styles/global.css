@@ -42,7 +42,7 @@
 
     /* Font Family */
     /* Make sure to load Inter font in your app */
-    --font-sans: Ubuntu;
+    --font-sans: var(--font-ubuntu);
 }
 
 .dark,

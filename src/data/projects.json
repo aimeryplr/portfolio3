@@ -5,7 +5,7 @@
     "technologies": ["react", "nestjs", "docker", "mongodb"],
     "people": 4,
     "preview": "./k-hubs/preview.png",
-    "website": "https://app.k-hubs.com",
+    "website": "https://k-hubs.com",
     "type": "professional"
   },
   {
@@ -14,7 +14,7 @@
     "technologies": ["react", "socket-io"],
     "people": 1,
     "preview": "./koridor/preview.png",
-    "website": "https://app.k-hubs.com",
+    "website": "https://k-hubs.com",
     "type": "professional"
   },
   {
