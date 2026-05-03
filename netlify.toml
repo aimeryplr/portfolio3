@@ -1,0 +1,13 @@
+[build]
+  command = "pnpm build"
+  publish = "dist"
+
+[dev]
+  command = "pnpm dev"
+  publish = "dist"
+  framework = "astro"
+
+[[redirects]]
+  from = "/*"
+  status = 200
+  force = true

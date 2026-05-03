@@ -12,7 +12,15 @@ export default defineConfig({
   output: "server",
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    ssr: {
+      noExternal: [
+        '@heroui/react',
+        '@react-aria/i18n',
+        '@react-aria/ssr',
+        '@react-aria/util'
+      ],
+    },
   },
 
   integrations: [react(), icon()],
