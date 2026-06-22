@@ -69,7 +69,6 @@ export default function ProjectNav({ projects }: Props) {
       const dist = Math.abs(elCenter - viewportCenter);
 
       const t = Math.max(0, 1 - dist / INFLUENCE_PX);
-      const isHovered = hoveredRef.current === i;
 
       const targetWidth = MIN_WIDTH + t * (MAX_WIDTH - MIN_WIDTH);
       const targetAlpha = 0.15 + t * 0.75;
@@ -82,12 +81,24 @@ export default function ProjectNav({ projects }: Props) {
 
       bar.style.width = `${w}px`;
       bar.style.backgroundColor = rgba(rgb, a);
+    });
 
-      if (label) {
-        const showLabel = isHovered;
-        label.style.opacity = showLabel ? "1" : "0";
-        label.style.transform = showLabel ? "translateX(0)" : "translateX(8px)";
-      }
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    projects.forEach(({ id }, i) => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const dist = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+      if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+    });
+
+    projects.forEach((_, i) => {
+      const label = labelsRef.current[i];
+      if (!label) return;
+      const show = i === closestIdx || hoveredRef.current === i;
+      label.style.opacity = show ? "1" : "0";
+      label.style.transform = show ? "translateX(0)" : "translateX(8px)";
     });
 
     rafRef.current = requestAnimationFrame(update);
