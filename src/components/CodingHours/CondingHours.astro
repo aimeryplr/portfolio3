@@ -4,22 +4,22 @@ import CodingHoursList from "./CodingHoursList.astro";
 import {Technologies} from "../../enum/technologies.ts";
 import type {ComponentProps} from "astro/types";
 
-const TSCondingHours = await fetchTSCodingHours();
+const TSCodingHours = await fetchTSCodingHours();
 
 const codingHours: ComponentProps<typeof CodingHoursList>['codingHours'] = [
   {
     technology: Technologies.TYPESCRIPT,
-    hours: TSCondingHours.hours,
-    percent: TSCondingHours.percent
+    hours: TSCodingHours.hours,
+    percent: TSCodingHours.percent
   },
   {
     technology: Technologies.REACT,
-    hours: Math.round(TSCondingHours.hours * .62),
+    hours: Math.round(TSCodingHours.hours * .62),
     percent: 62,
   },
   {
     technology: Technologies.NESTJS,
-    hours: Math.round(TSCondingHours.hours * .23),
+    hours: Math.round(TSCodingHours.hours * .23),
     percent: 32
   }
 ]

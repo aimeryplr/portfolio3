@@ -2,6 +2,7 @@
   {
     "id": "K-HUBS",
     "name": "K-HUBS",
+    "description": "Plateforme collaborative permettant aux équipes de centraliser leurs ressources, gérer leurs projets et communiquer en temps réel.",
     "technologies": ["react", "nestjs", "docker", "mongodb"],
     "people": 4,
     "preview": "./k-hubs/preview.png",
@@ -11,6 +12,7 @@
   {
     "id": "Koridor",
     "name": "Koridor",
+    "description": "Jeu de plateau en ligne multijoueur avec des parties en temps réel grâce à Socket.io.",
     "technologies": ["react", "socket-io"],
     "people": 1,
     "preview": "./koridor/preview.png",
@@ -20,6 +22,7 @@
   {
     "id": "Nomadio",
     "name": "Nomadio",
+    "description": "Application mobile pour découvrir et partager des itinéraires de voyage, avec synchronisation hors-ligne.",
     "technologies": ["graphql", "kotlin"],
     "people": 3,
     "preview": "./nomadio/preview.png",
@@ -29,6 +32,7 @@
   {
     "id": "Cyber-Factory",
     "name": "Cyber-Factory",
+    "description": "Cyber-Factory est un jeu de simulation d'automatisation ancré dans un univers cyberpunk dystopique. L'objectif est de concevoir et d'optimiser des chaînes de production complexes au sein d'un empire industriel high-tech. Le joueur doit gérer des ressources, placer stratégiquement des machines et maximiser sa rentabilité dans un environnement exigeant.",
     "technologies": ["roblox", "ts"],
     "people": 3,
     "preview": "./cyber-factory/preview.png",
@@ -38,6 +42,7 @@
   {
     "id": "Sniper Bot",
     "name": "Sniper Bot",
+    "description": "Bot de trading automatisé sur la blockchain Ethereum pour détecter et exécuter des opportunités d'achat rapide.",
     "technologies": ["cryptocurrency", "react"],
     "people": 1,
     "preview": "./sniper-bot/preview.png",

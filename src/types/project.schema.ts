@@ -5,6 +5,7 @@ import type {SchemaContext} from "astro/content/config";
 
 export const projectSchema = ({image}: SchemaContext) => z.object({
   name: z.string(),
+  description: z.string(),
   technologies: z.array(z.enum(Object.values(Technologies))),
   people: z.int(),
   type: z.enum(Object.values(ProjectType)),

@@ -11,9 +11,13 @@ import {faArrowDown} from "@fortawesome/free-solid-svg-icons";
 import {getCollection} from "astro:content";
 import {ProjectType, ProjectTypeNames} from "../enum/projects.ts";
 import type {Project} from "../types/project.schema.ts";
-import ProjectPreview from '../components/Projects/ProjectPreview.astro';
+import ProjectPreview from '../components/Projects/ProjectPreview.tsx';
+import ProjectNav from '../components/Projects/ProjectNav.tsx';
 
 const projects = await getCollection('projects');
+projects.sort((a, b) => Object.values(ProjectType).findIndex((e => e === a.data.type)) - Object.values(ProjectType).findIndex((e => e === b.data.type)))
+const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, '-');
+const allProjects = projects.map((p) => ({ id: slugify(p.id), name: p.data.name }));
 ---
 
 <BaseLayout>
@@ -26,15 +30,13 @@ const projects = await getCollection('projects');
                     <h1 class="text-2xl font-extrabold">DÉVELOPPEUR FULL STACK</h1>
                     <h2 class="text-xl font-bold">Aimery PELLERIN</h2>
                 </div>
-                <p class="w-120">Au fil des années, j'ai développé un véritable intérêt pour l'exploration de nouveaux
-                    langages de programmation et l'utilisation d'applications innovantes,
-                    stimulant ainsi ma créativité et nourrissant ma curiosité. Actuellement, je poursuis l'apprentissage
-                    de ces compétences à l'IUT 2 de Grenoble.</p>
+                <p class="w-120">Développer et relever des défis complexes en informatique me passionne. Chaque nouveau projet est une nouvelle opportunité pour apprendre et perfectionner mes compétences. Je me spécialise dans le développement Node.js, et plus particulièrement React / NestJS.</p>
+                <p class="w-120">Le niveau 1 de plongée sous marine en poche, j'aimerais parcourir le dessous des océans partout dans le monde, ce portfolio est à cette image</p>
             </div>
             <div class="flex flex-col gap-4">
-                <CondingHours server:defer>
-                    <CodingHoursList codingHours={emptyCodingHoursProps} slot={'fallback'}/>
-                </CondingHours>
+              <CondingHours server:defer>
+                  <CodingHoursList codingHours={emptyCodingHoursProps} slot={'fallback'}/>
+              </CondingHours>
             </div>
         </div>
         <div class="flex flex-col items-center gap-2 absolute bottom-1/3 left-1/2 -translate-x-1/2">
@@ -43,7 +45,8 @@ const projects = await getCollection('projects');
         </div>
         <WaveSvg class={"bottom-0 translate-y-[-99%] text-background w-full h-auto"}/>
     </section>
-    <section class="flex flex-col gap-8 items-center">
+    <ProjectNav client:load projects={allProjects} />
+    <section id="projects-section" class="flex flex-col gap-8 items-center">
       {Object.values(ProjectType).map((projectType) => {
         const filteredProjects = projects.filter((project) => project.data.type === projectType);
         const sectionTitle = ProjectTypeNames[projectType]
@@ -51,7 +54,11 @@ const projects = await getCollection('projects');
         return (
           <div class="w-260 flex flex-col gap-8">
             <h2 class="text-2xl font-bold">{sectionTitle}</h2>
-            {filteredProjects.map((project) => <ProjectPreview project={project.data} />)}
+            {filteredProjects.map((project) => (
+              <div id={slugify(project.id)}>
+                <ProjectPreview client:load project={{...project.data, preview: project.data.preview.src}} />
+              </div>
+            ))}
           </div>
         )
       })}

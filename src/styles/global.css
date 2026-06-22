@@ -82,3 +82,11 @@
     --warning: oklch(82.03% 0.1422 79.35);
     --warning-foreground: oklch(21.03% 0.0059 79.35);
 }
+
+html {
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}

@@ -12,7 +12,8 @@ export default defineConfig([
   eslintConfigPrettier,
   {
     rules: {
-      "indent": ['error', 2]
+      "indent": ['error', 2],
+      "react/react-in-jsx-scope": "off"
     }
   }
 ]);

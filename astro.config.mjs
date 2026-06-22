@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 
 import icon from 'astro-icon';
 
-import netlify from '@astrojs/netlify';
+import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
@@ -31,5 +31,5 @@ export default defineConfig({
     cssVariable: "--font-ubuntu",
   }],
 
-  adapter: netlify()
+  adapter: node({ mode: 'standalone' })
 });
