@@ -71,10 +71,7 @@ export default function ProjectPreview({ project }: Props) {
         alt={project.name}
         loading="lazy"
       />
-      <div
-        className="overflow-hidden relative z-1 transition-all duration-300 ease-out"
-        style={{ maxHeight: hovered ? "200px" : "0" }}
-      >
+      <div className="overflow-hidden relative z-1">
         <p className="text-surface-foreground">{project.description}</p>
       </div>
       <WaveLayer raw={wave1} duration={12} direction="left" playing={hovered} />

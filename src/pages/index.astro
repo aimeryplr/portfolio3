@@ -13,6 +13,7 @@ import {ProjectType, ProjectTypeNames} from "../enum/projects.ts";
 import type {Project} from "../types/project.schema.ts";
 import ProjectPreview from '../components/Projects/ProjectPreview.tsx';
 import ProjectNav from '../components/Projects/ProjectNav.tsx';
+import Footer from '../components/Contact/Footer.astro';
 
 const projects = await getCollection('projects');
 projects.sort((a, b) => Object.values(ProjectType).findIndex((e => e === a.data.type)) - Object.values(ProjectType).findIndex((e => e === b.data.type)))
@@ -46,7 +47,7 @@ const allProjects = projects.map((p) => ({ id: slugify(p.id), name: p.data.name 
         <WaveSvg class={"bottom-0 translate-y-[-99%] text-background w-full h-auto"}/>
     </section>
     <ProjectNav client:load projects={allProjects} />
-    <section id="projects-section" class="flex flex-col gap-8 items-center">
+    <section id="projects-section" class="flex flex-col gap-8 items-center pb-16">
       {Object.values(ProjectType).map((projectType) => {
         const filteredProjects = projects.filter((project) => project.data.type === projectType);
         const sectionTitle = ProjectTypeNames[projectType]
@@ -63,5 +64,5 @@ const allProjects = projects.map((p) => ({ id: slugify(p.id), name: p.data.name 
         )
       })}
     </section>
-    <footer class="h-8 w-full" />
+    <Footer />
 </BaseLayout>
