@@ -37,7 +37,7 @@ export default function ContactForm() {
       const json = await res.json();
 
       if (!res.ok) {
-        setErrorMessage(json.error ?? "Something went wrong.");
+        setErrorMessage(json.error ?? "Une erreur est survenue.");
         setStatus("error");
         return;
       }
@@ -45,7 +45,7 @@ export default function ContactForm() {
       setStatus("success");
       form.reset();
     } catch {
-      setErrorMessage("Network error, please try again.");
+      setErrorMessage("Erreur réseau, veuillez réessayer.");
       setStatus("error");
     }
   }
@@ -53,6 +53,7 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <Alert status="success" className="w-full max-w-120">
+        <Alert.Indicator />
         <Alert.Content>
           <Alert.Description>Merci, votre message a bien été envoyé !</Alert.Description>
         </Alert.Content>

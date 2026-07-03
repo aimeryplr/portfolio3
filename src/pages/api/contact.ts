@@ -9,14 +9,14 @@ export const POST: APIRoute = async ({ request }) => {
   const { RESEND_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL } = import.meta.env;
 
   if (!RESEND_API_KEY || !CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
-    return Response.json({ error: "Contact form is not configured." }, { status: 500 });
+    return Response.json({ error: "Le formulaire de contact n'est pas configuré." }, { status: 500 });
   }
 
   let body: { name?: string; email?: string; message?: string };
   try {
     body = await request.json();
   } catch {
-    return Response.json({ error: "Invalid request body." }, { status: 400 });
+    return Response.json({ error: "Requête invalide." }, { status: 400 });
   }
 
   const name = body.name?.trim();
@@ -24,10 +24,10 @@ export const POST: APIRoute = async ({ request }) => {
   const message = body.message?.trim();
 
   if (!name || !email || !message) {
-    return Response.json({ error: "Name, email and message are required." }, { status: 400 });
+    return Response.json({ error: "Le nom, l'email et le message sont requis." }, { status: 400 });
   }
   if (!EMAIL_RE.test(email)) {
-    return Response.json({ error: "Please provide a valid email address." }, { status: 400 });
+    return Response.json({ error: "Veuillez saisir une adresse email valide." }, { status: 400 });
   }
 
   const resend = new Resend(RESEND_API_KEY);
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
   });
 
   if (error) {
-    return Response.json({ error: "Failed to send the message. Please try again later." }, { status: 502 });
+    return Response.json({ error: "Échec de l'envoi du message. Veuillez réessayer plus tard." }, { status: 502 });
   }
 
   return Response.json({ success: true });
