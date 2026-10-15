@@ -1,16 +1,37 @@
 ---
-import Image from "astro/components/Image.astro";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import diverBackground from "../images/diver-background.png";
-import { Button } from "@heroui/react/button";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faArrowLeft, faArrowUp} from "@fortawesome/free-solid-svg-icons";
+import ErrorScreen from "../components/Dive/ErrorScreen.astro";
 ---
 
-<BaseLayout title="Page Introuvable">
-    <Image class={"object-cover w-full h-svh opacity-80 max-w-none"} loading={'eager'} src={diverBackground}
-           alt={'diver background'}/>
-    <div class="absolute left-1/2 top-1/2 -translate-1/2 p-5 flex flex-col gap-4 rounded items-center ">
-        <h1 class="text-4xl font-bold">404 - Page introuvable</h1>
-        <h2 class="text-2xl">Vous etes perdu dans l'ocean</h2>
-        <a href="/"><Button>Retourner à l'accueil</Button></a>
-    </div>
-</BaseLayout>
+<ErrorScreen
+    code={404}
+    title="PAGE INTROUVABLE"
+    subtitle="Vous êtes perdu dans l'océan"
+    command="dive --to /404"
+    error="erreur 404 : zone non cartographiée"
+    depth="??.?"
+    oceanDepth={0.5}
+>
+    <p>Cette page n'existe pas, ou elle a dérivé avec le courant. Pas de panique : on remonte doucement, sans sauter le palier.</p>
+    <Fragment slot="actions">
+        <a href="/" class="project-link project-link-primary">
+            <FontAwesomeIcon icon={faArrowUp} className='w-3.5 h-3.5'/>
+            Remonter à la surface
+        </a>
+        <button type="button" class="project-link" data-back>
+            <FontAwesomeIcon icon={faArrowLeft} className='w-3.5 h-3.5'/>
+            Page précédente
+        </button>
+    </Fragment>
+</ErrorScreen>
+
+<script>
+    // the static page is served for every unknown path: show the one the visitor actually tried
+    const prompt = document.querySelector("[data-command]");
+    if (prompt) prompt.textContent = `aimery@portfolio:~$ dive --to ${location.pathname}`;
+
+    const back = document.querySelector<HTMLButtonElement>("[data-back]")!;
+    if (history.length > 1) back.addEventListener("click", () => history.back());
+    else back.remove();
+</script>

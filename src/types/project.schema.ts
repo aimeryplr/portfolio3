@@ -11,6 +11,8 @@ export const projectSchema = ({image}: SchemaContext) => z.object({
   type: z.enum(Object.values(ProjectType)),
   company: z.string().optional(),
   preview: image(),
+  // screenshots with small text need more than the CDN's default quality
+  previewQuality: z.int().min(1).max(100).optional(),
   website: z.url().optional(),
   code: z.url().optional(),
 })

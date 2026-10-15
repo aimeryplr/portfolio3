@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { faArrowUpRightFromSquare, faCode } from "@fortawesome/free-solid-svg-icons";
 import ProjectLink from "./ProjectLink.tsx";
 import ProjectBadge from "./ProjectBadge.tsx";
@@ -25,7 +26,6 @@ interface ProjectData {
   name: string;
   description: string;
   technologies: Technologies[];
-  preview: string;
   website?: string;
   code?: string;
   company?: string;
@@ -33,12 +33,14 @@ interface ProjectData {
 
 interface Props {
   project: ProjectData;
+  // filled by the "shot" slot in index.astro
+  shot: ReactNode;
 }
 
-export default function ProjectPreview({ project }: Props) {
+export default function ProjectPreview({ project, shot }: Props) {
   return (
     <article className="card">
-      <ProjectShot src={project.preview} alt={project.name} />
+      <ProjectShot>{shot}</ProjectShot>
       <div className="flex justify-between items-center gap-4">
         <div>
           <h3 className="text-xl font-bold">{project.name}</h3>

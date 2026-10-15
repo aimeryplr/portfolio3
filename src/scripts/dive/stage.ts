@@ -8,6 +8,7 @@ export const stage = {
   H: 0,
   DPR: 1,
   depth: 0, // 0..1 page progress
+  fixedDepth: null as number | null, // single-screen pages (404, 500) sit at one depth instead
   docH: 1,
   maxS: 1,
   reduced: false,
@@ -19,13 +20,26 @@ export const ctx = () => context;
 
 export const mouse = { x: -9999, y: -9999, px: -9999, py: -9999, speed: 0, active: false };
 
-export const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
+// reading scrollHeight forces a layout, so it is cached and refreshed only when the body resizes
+let docHeight = 0;
+let observed = false;
+function docH() {
+  if (!observed) {
+    observed = true;
+    const read = () => (docHeight = document.documentElement.scrollHeight);
+    read();
+    new ResizeObserver(read).observe(document.body);
+  }
+  return docHeight;
+}
+
+export const maxScroll = () => Math.max(1, docH() - innerHeight);
 export const pageDepth = () => Math.max(0, Math.min(1, scrollY / maxScroll()));
 
 export function measure() {
-  stage.docH = document.documentElement.scrollHeight;
+  stage.docH = docH();
   stage.maxS = Math.max(1, stage.docH - stage.H);
-  stage.depth = pageDepth();
+  stage.depth = stage.fixedDepth ?? pageDepth();
 }
 
 // page y that sits mid-screen when the dive computer reads m meters

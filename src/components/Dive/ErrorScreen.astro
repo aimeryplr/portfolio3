@@ -1,0 +1,105 @@
+---
+// Full-screen error (404, 500) over the ocean, written like the hero: a failed command, a title, a way back up.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Ocean from "./Ocean.astro";
+
+interface Props {
+  code: number;
+  title: string;
+  subtitle: string;
+  command: string;
+  error: string;
+  depth: string;
+  // 0..1, where the water sits behind the message
+  oceanDepth: number;
+}
+
+const { code, title, subtitle, command, error, depth, oceanDepth } = Astro.props;
+---
+
+<BaseLayout title={`${code} · ${subtitle}`} noindex>
+  <Ocean depth={oceanDepth} />
+  <main class="dive-column">
+    <section class="hero lost">
+      <div class="prompt">
+        <div data-command>aimery@portfolio:~$ {command}</div>
+        <div class="prompt-error">{error}</div>
+        <div>aimery@portfolio:~$ <span class="prompt-cursor"></span></div>
+      </div>
+      <h1>
+        <span class="hero-title">{title}</span>
+        <span class="hero-name">{subtitle}</span>
+      </h1>
+      <slot />
+      <div class="readout card">
+        <div><div class="lbl">CODE</div><div class="val">{code}</div></div>
+        <div><div class="lbl">PROF</div><div class="val">{depth}<small> m</small></div></div>
+        <div><div class="lbl">ACTION</div><div class="val">REMONTER</div></div>
+      </div>
+      <div class="actions">
+        <slot name="actions" />
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .lost {
+    min-height: 100svh;
+    padding-block: 60px;
+  }
+  .prompt {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .prompt-error {
+    color: var(--warning);
+  }
+  .readout {
+    flex: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-self: flex-start;
+    padding: 12px 18px;
+    font-family: var(--font-mono);
+  }
+  .readout:hover {
+    transform: none;
+    border-color: var(--edge);
+  }
+  .lbl {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .val {
+    font-size: 22px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .val small {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .actions :global(.project-link) {
+    width: auto;
+    height: 40px;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+</style>

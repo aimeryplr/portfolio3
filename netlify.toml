@@ -6,3 +6,16 @@
   command = "pnpm dev"
   publish = "dist"
   framework = "astro"
+
+# the netlify.app addresses serve the same content as the custom domain: send them all to aimerypellerin.fr
+[[redirects]]
+  from = "https://portfolio-aimery.netlify.app/*"
+  to = "https://aimerypellerin.fr/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://master--portfolio-aimery.netlify.app/*"
+  to = "https://aimerypellerin.fr/:splat"
+  status = 301
+  force = true

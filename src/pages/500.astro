@@ -1,0 +1,33 @@
+---
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faArrowUp, faRotateRight} from "@fortawesome/free-solid-svg-icons";
+import ErrorScreen from "../components/Dive/ErrorScreen.astro";
+
+// the error itself is never shown: it can carry server details
+---
+
+<ErrorScreen
+    code={500}
+    title="ERREUR SERVEUR"
+    subtitle="L'ordinateur de plongée a lâché"
+    command="dive --resume"
+    error="erreur 500 : panne de l'ordinateur de plongée"
+    depth="--.-"
+    oceanDepth={0.3}
+>
+    <p>Quelque chose a cassé de notre côté, pas du vôtre. Réessayez dans un instant ; si le problème persiste, l'accueil reste accessible.</p>
+    <Fragment slot="actions">
+        <button type="button" class="project-link project-link-primary" data-retry>
+            <FontAwesomeIcon icon={faRotateRight} className='w-3.5 h-3.5'/>
+            Réessayer
+        </button>
+        <a href="/" class="project-link">
+            <FontAwesomeIcon icon={faArrowUp} className='w-3.5 h-3.5'/>
+            Remonter à la surface
+        </a>
+    </Fragment>
+</ErrorScreen>
+
+<script>
+    document.querySelector("[data-retry]")!.addEventListener("click", () => location.reload());
+</script>

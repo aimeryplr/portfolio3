@@ -31,6 +31,7 @@ export default function ContactForm() {
           name: data.get("name"),
           email: data.get("email"),
           message: data.get("message"),
+          website: data.get("website"),
         }),
       });
 
@@ -63,17 +64,26 @@ export default function ContactForm() {
 
   return (
     <Form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-120">
-      <TextField name="name" type="text" isRequired className="flex flex-col gap-1">
+      {/* honeypot, hidden from people and assistive tech */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-px w-px opacity-0"
+      />
+      <TextField name="name" type="text" isRequired maxLength={100} className="flex flex-col gap-1">
         <Label>Nom</Label>
         <Input />
         <FieldError className="text-danger text-sm" />
       </TextField>
-      <TextField name="email" type="email" isRequired className="flex flex-col gap-1">
+      <TextField name="email" type="email" isRequired maxLength={254} className="flex flex-col gap-1">
         <Label>Email</Label>
         <Input />
         <FieldError className="text-danger text-sm" />
       </TextField>
-      <TextField name="message" isRequired className="flex flex-col gap-1">
+      <TextField name="message" isRequired maxLength={5000} className="flex flex-col gap-1">
         <Label>Message</Label>
         <TextArea rows={5} className="resize-none" />
         <FieldError className="text-danger text-sm" />

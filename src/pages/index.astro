@@ -1,6 +1,6 @@
 ---
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {getImage} from "astro:assets";
+import {Image} from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {faArrowDown} from "@fortawesome/free-solid-svg-icons";
 import {getCollection} from "astro:content";
@@ -13,9 +13,6 @@ import DiveComputer from '../components/Dive/DiveComputer.astro';
 const projects = await getCollection('projects');
 const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, '-');
 const projectTypes = Object.values(ProjectType);
-// the 3300px source screenshots are far bigger than a card needs
-const previews = Object.fromEntries(await Promise.all(projects.map(async (p) =>
-  [p.id, (await getImage({src: p.data.preview, width: 1200, format: 'webp'})).src])));
 ---
 
 <BaseLayout>
@@ -23,10 +20,10 @@ const previews = Object.fromEntries(await Promise.all(projects.map(async (p) =>
     <main class="dive-column">
         <section class="hero" data-stop="Surface">
             <div class="prompt">aimery@portfolio:~$ dive --max-depth 40m <span class="prompt-cursor"></span></div>
-            <div>
-                <h1>DÉVELOPPEUR FULL STACK</h1>
-                <h2>Aimery PELLERIN</h2>
-            </div>
+            <h1>
+                <span class="hero-title">DÉVELOPPEUR FULL STACK</span>
+                <span class="hero-name">Aimery PELLERIN</span>
+            </h1>
             <p>Développer et relever des défis complexes en informatique me passionne. Chaque nouveau projet est une nouvelle opportunité pour apprendre et perfectionner mes compétences. Je me spécialise dans le développement Node.js, et plus particulièrement React / NestJS.</p>
             <p>Le niveau 1 de plongée sous marine en poche, j'aimerais parcourir le dessous des océans partout dans le monde, ce portfolio est à cette image</p>
             <div class="descend">
@@ -48,7 +45,11 @@ const previews = Object.fromEntries(await Promise.all(projects.map(async (p) =>
                     <div class="stop-grid">
                         {filteredProjects.map((project) => (
                             <div id={slugify(project.id)} class="flex">
-                                <ProjectPreview client:visible project={{...project.data, preview: previews[project.id]}}/>
+                                <ProjectPreview project={project.data}>
+                                    <Image slot="shot" class="shot-img" src={project.data.preview} alt={project.data.name}
+                                           width={1920} widths={[480, 960, 1440, 1920]} quality={project.data.previewQuality}
+                                           sizes="(min-width: 810px) 450px, 100vw"/>
+                                </ProjectPreview>
                             </div>
                         ))}
                     </div>

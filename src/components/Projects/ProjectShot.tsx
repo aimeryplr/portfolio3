@@ -1,13 +1,10 @@
+import type { ReactNode } from "react";
+
 interface Props {
-  src: string;
-  alt: string;
+  children: ReactNode;
 }
 
-// the screenshot in a plain frame
-export default function ProjectShot({ src, alt }: Props) {
-  return (
-    <div className="shot">
-      <img className="shot-img" src={src} alt={alt} loading="lazy" decoding="async" />
-    </div>
-  );
+// the screenshot (an Astro <Image /> passed through a slot) in a plain frame
+export default function ProjectShot({ children }: Props) {
+  return <div className="shot">{children}</div>;
 }

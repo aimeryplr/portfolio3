@@ -17,6 +17,7 @@
     "technologies": ["astro", "ts", "sanity", "cloudflare"],
     "people": 1,
     "preview": "./north-wind/preview.png",
+    "previewQuality": 92,
     "website": "https://northwind-airsoft.fr",
     "type": "freelance"
   },

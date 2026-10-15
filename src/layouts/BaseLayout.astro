@@ -4,20 +4,81 @@ import '@styles/global.css'
 
 interface Props {
   title?: string;
+  description?: string;
+  noindex?: boolean;
 }
 
-const {title = 'Aimery'} = Astro.props
+const {
+  title = 'Aimery Pellerin | Portfolio de développeur full stack',
+  description = "Portfolio d'Aimery Pellerin, développeur full stack Node.js, React et NestJS : projets personnels, freelance et professionnels.",
+  noindex = false,
+} = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-image.jpg', Astro.site);
+
+// lets Google tie the name "Aimery Pellerin" to this site and to the linked profiles
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${Astro.site}#person`,
+      name: 'Aimery Pellerin',
+      givenName: 'Aimery',
+      familyName: 'Pellerin',
+      jobTitle: 'Développeur full stack',
+      url: Astro.site,
+      image: ogImage,
+      address: {'@type': 'PostalAddress', addressRegion: 'Hauts-de-France', addressCountry: 'FR'},
+      knowsAbout: ['Node.js', 'React', 'NestJS', 'TypeScript', 'Kotlin', 'GraphQL', 'Docker'],
+      sameAs: ['https://github.com/aimeryplr'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${Astro.site}#website`,
+      url: Astro.site,
+      name: 'Aimery Pellerin',
+      alternateName: ['Aimery Pellerin Portfolio', 'Portfolio Aimery'],
+      inLanguage: 'fr-FR',
+      author: {'@id': `${Astro.site}#person`},
+    },
+  ],
+};
 ---
 
 <html lang="fr" class="dark" data-theme="dark">
 <head>
     <meta charset="utf-8"/>
-    <link rel="icon" href="/favicon.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta name="generator" content={Astro.generator}/>
     <Font cssVariable="--font-ubuntu" preload />
     <Font cssVariable="--font-ubuntu-mono" />
     <title>{title}</title>
+    <meta name="description" content={description}/>
+    <meta name="author" content="Aimery Pellerin"/>
+    {noindex ? <meta name="robots" content="noindex"/> : <link rel="canonical" href={canonical}/>}
+    <link rel="icon" type="image/png" href="/favicon.png"/>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+    <link rel="sitemap" href="/sitemap-index.xml"/>
+    <meta name="theme-color" content="oklch(13.50% 0.0350 255)"/>
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="fr_FR"/>
+    <meta property="og:site_name" content="Aimery Pellerin"/>
+    <meta property="og:url" content={canonical}/>
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={description}/>
+    <meta property="og:image" content={ogImage}/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="Aimery Pellerin, développeur full stack"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content={title}/>
+    <meta name="twitter:description" content={description}/>
+    <meta name="twitter:image" content={ogImage}/>
+
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(structuredData)}/>}
 </head>
 <body class="bg-background w-full min-h-svh overflow-x-hidden">
     <slot/>

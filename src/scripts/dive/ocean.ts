@@ -18,10 +18,11 @@ const fishCount = () => ({
 
 // The whole background: low-poly water, god rays, creatures and particles.
 // Scroll is the descent: 0..1 of the page maps to 0..40 m.
-export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasElement) {
+export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasElement, fixedDepth: number | null = null) {
   const g = ocean.getContext("2d");
   if (!g) return;
   setCtx(g);
+  stage.fixedDepth = fixedDepth;
   stage.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rays = createLightRays(raysCanvas);
 
@@ -33,8 +34,8 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   document.addEventListener("mouseleave", () => (mouse.active = false));
   addEventListener("pointerdown", (e) => {
     if ((e.target as Element).closest("a, button, input, textarea, label, summary")) return;
+    if (stage.reduced) return;
     burst(e.clientX, e.clientY);
-    if (stage.reduced) draw(0);
   });
 
   let last = performance.now();
@@ -111,7 +112,20 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   resize();
   spawnAnglers();
   if (stage.reduced) {
-    addEventListener("scroll", () => draw(0), { passive: true });
+    // one redraw per frame at most, scroll events can fire faster than that
+    let queued = false;
+    addEventListener(
+      "scroll",
+      () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          draw(0);
+        });
+      },
+      { passive: true },
+    );
     draw(0);
   } else {
     requestAnimationFrame(loop);

@@ -1,17 +1,23 @@
 ---
 // Fixed low-poly ocean behind the whole page: water mesh, god rays, fish, shark, anglerfish, bubbles.
+
+interface Props {
+  // 0..1, pins the water at one depth instead of following the scroll
+  depth?: number;
+}
+
+const { depth } = Astro.props;
 ---
 
-<canvas id="ocean" class="ocean-layer" aria-hidden="true"></canvas>
+<canvas id="ocean" data-depth={depth} class="ocean-layer" aria-hidden="true"></canvas>
 <canvas id="rays" class="ocean-layer mix-blend-screen" aria-hidden="true"></canvas>
 
 <script>
   import { startOcean } from "../../scripts/dive/ocean.ts";
 
-  startOcean(
-    document.getElementById("ocean") as HTMLCanvasElement,
-    document.getElementById("rays") as HTMLCanvasElement,
-  );
+  const ocean = document.getElementById("ocean") as HTMLCanvasElement;
+  const depth = ocean.dataset.depth;
+  startOcean(ocean, document.getElementById("rays") as HTMLCanvasElement, depth ? Number(depth) : null);
 </script>
 
 <style>
