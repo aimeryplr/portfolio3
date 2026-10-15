@@ -6,7 +6,7 @@
     "technologies": ["react", "nestjs", "docker", "mongodb"],
     "people": 4,
     "preview": "./k-hubs/preview.png",
-    "website": "https://k-hubs.com",
+    "website": "https://app.k-hubs.com",
     "type": "professional",
     "company": "Mobiteach"
   },
@@ -28,7 +28,7 @@
     "technologies": ["react", "socket-io"],
     "people": 1,
     "preview": "./koridor/preview.png",
-    "website": "https://k-hubs.com",
+    "website": "https://app.k-hubs.com",
     "type": "professional",
     "company": "Mobiteach"
   },
@@ -39,7 +39,7 @@
     "technologies": ["react", "socket-io"],
     "people": 1,
     "preview": "./like-my-prez/preview.png",
-    "website": "https://k-hubs.com",
+    "website": "https://app.k-hubs.com",
     "type": "professional",
     "company": "Mobiteach"
   },
@@ -50,7 +50,7 @@
     "technologies": ["graphql", "kotlin"],
     "people": 3,
     "preview": "./nomadio/preview.png",
-    "website": "https://morgannas.myds.me/nomadio/",
+    "website": "https://sites.morganratgris.fr/nomadio",
     "type": "personal"
   },
   {
