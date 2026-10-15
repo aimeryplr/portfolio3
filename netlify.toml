@@ -2,6 +2,10 @@
   command = "pnpm build"
   publish = "dist"
 
+# the contact address is printed in the public CV on purpose: don't fail the build when the scan finds it
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "CONTACT_TO_EMAIL"
+
 [dev]
   command = "pnpm dev"
   publish = "dist"
