@@ -35,6 +35,10 @@ const projectTypes = Object.values(ProjectType);
         {projectTypes.map((projectType) => {
             const filteredProjects = projects.filter((project) => project.data.type === projectType);
             const sectionTitle = ProjectTypeNames[projectType];
+            // auto-fit stretches a lone card across the 888px column; otherwise two columns from 810px
+            const shotSizes = filteredProjects.length === 1
+                ? "(min-width: 920px) 842px, calc(100vw - 78px)"
+                : "(min-width: 920px) 389px, (min-width: 810px) calc(50vw - 71px), calc(100vw - 78px)";
 
             return (
                 <section class="stop" data-stop={sectionTitle}>
@@ -48,7 +52,7 @@ const projectTypes = Object.values(ProjectType);
                                 <ProjectPreview project={project.data}>
                                     <Image slot="shot" class="shot-img" src={project.data.preview} alt={project.data.name}
                                            width={1920} widths={[480, 960, 1440, 1920]} quality={project.data.previewQuality}
-                                           sizes="(min-width: 810px) 450px, 100vw"/>
+                                           sizes={shotSizes}/>
                                 </ProjectPreview>
                             </div>
                         ))}
