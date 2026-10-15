@@ -23,9 +23,12 @@ const { depth } = Astro.props;
 <style>
   .ocean-layer {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
+    /* the large viewport: the same height whether the address bar is shown or not */
+    height: 100lvh;
     z-index: 0;
     display: block;
     pointer-events: none;

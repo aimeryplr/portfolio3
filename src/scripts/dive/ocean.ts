@@ -29,8 +29,11 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   stage.touch = matchMedia("(pointer: coarse)").matches;
   const rays = createLightRays(raysCanvas);
   // the wheel scroll is stepped from this loop, so the canvas never lags a frame behind the page.
-  // lerp 0.2 instead of the default 0.1: the page catches up with the wheel in about 0.25 s, not 0.5 s
-  const lenis = stage.reduced || fixedDepth !== null ? null : new Lenis({ anchors: true, lerp: 0.2 });
+  // lerp 0.2 instead of the default 0.1: the page catches up with the wheel in about 0.25 s, not 0.5 s.
+  // syncTouch does the same for a finger: left to the browser, a touch scroll moves the page on the
+  // compositor while the canvas redraws from scrollY a frame or more later, and the water drags behind
+  const lenis =
+    stage.reduced || fixedDepth !== null ? null : new Lenis({ anchors: true, lerp: 0.2, syncTouch: true });
   setScroller(lenis);
 
   addEventListener("pointermove", (e) => {
@@ -112,10 +115,17 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
     requestAnimationFrame(loop);
   }
 
+  // The canvas is sized in CSS to the large viewport (100lvh), so a phone's address bar sliding in
+  // or out does not change it. Its resize events are dropped here: rebuilding the canvas, the reef and
+  // the school is a visible hitch, and the bar moves exactly when a scroll starts.
   function resize() {
-    stage.DPR = Math.min(devicePixelRatio || 1, 1.5);
-    stage.W = innerWidth;
-    stage.H = innerHeight;
+    const dpr = Math.min(devicePixelRatio || 1, 1.5);
+    const w = ocean.clientWidth || innerWidth;
+    const h = ocean.clientHeight || innerHeight;
+    if (w === stage.W && h === stage.H && dpr === stage.DPR) return;
+    stage.DPR = dpr;
+    stage.W = w;
+    stage.H = h;
     ocean.width = stage.W * stage.DPR;
     ocean.height = stage.H * stage.DPR;
     rays.resize();
