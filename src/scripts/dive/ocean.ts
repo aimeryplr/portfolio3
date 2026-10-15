@@ -26,9 +26,11 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   setCtx(g);
   stage.fixedDepth = fixedDepth;
   stage.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  stage.touch = matchMedia("(pointer: coarse)").matches;
   const rays = createLightRays(raysCanvas);
-  // the wheel scroll is stepped from this loop, so the canvas never lags a frame behind the page
-  const lenis = stage.reduced || fixedDepth !== null ? null : new Lenis({ anchors: true });
+  // the wheel scroll is stepped from this loop, so the canvas never lags a frame behind the page.
+  // lerp 0.2 instead of the default 0.1: the page catches up with the wheel in about 0.25 s, not 0.5 s
+  const lenis = stage.reduced || fixedDepth !== null ? null : new Lenis({ anchors: true, lerp: 0.2 });
   setScroller(lenis);
 
   addEventListener("pointermove", (e) => {

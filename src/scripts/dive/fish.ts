@@ -14,6 +14,8 @@ export const LAYERS = [
   { z: 0.9, k: 1.22, share: 0.25, margin: 40 }, // near: drifts faster than the page
 ] as const;
 const SCHOOL_SIZE = 5;
+// on a touch screen the whole school swims in the mid layer: one plane, no parallax, less to draw
+const TOUCH_LAYER = 1;
 
 type Zone = "reef" | "shallow"; // shallow fish stay in the first metres, where the page opens
 
@@ -86,10 +88,19 @@ function makeFish(zone: Zone, layer: number, school: School): Fish {
 export function spawnFish(counts: Record<Zone, number>) {
   for (const zone of ["reef", "shallow"] as const) {
     LAYERS.forEach((L, layer) => {
-      const want = Math.max(1, Math.round(counts[zone] * L.share));
+      const want = !stage.touch
+        ? Math.max(1, Math.round(counts[zone] * L.share))
+        : layer === TOUCH_LAYER
+          ? counts[zone]
+          : 0;
       const key = `${zone}:${layer}`;
       const list = schools.get(key) ?? [];
       const nSchools = Math.ceil(want / SCHOOL_SIZE);
+      if (!nSchools) {
+        schools.delete(key);
+        for (const f of fish.filter((f) => f.zone === zone && f.layer === layer)) fish.splice(fish.indexOf(f), 1);
+        return;
+      }
       while (list.length < nSchools) list.push(makeSchool());
       list.length = nSchools;
       schools.set(key, list);

@@ -12,6 +12,7 @@ export const stage = {
   docH: 1,
   maxS: 1,
   reduced: false,
+  touch: false, // phones and tablets: a single fish layer
 };
 
 let context: CanvasRenderingContext2D;
