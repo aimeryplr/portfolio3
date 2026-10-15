@@ -5,13 +5,10 @@ import react from '@astrojs/react';
 
 import icon from 'astro-icon';
 
-import node from '@astrojs/node';
 import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
-
   vite: {
     plugins: [tailwindcss()],
     ssr: {
@@ -30,7 +27,11 @@ export default defineConfig({
     provider: fontProviders.fontsource(),
     name: "Ubuntu",
     cssVariable: "--font-ubuntu",
+  }, {
+    provider: fontProviders.fontsource(),
+    name: "Ubuntu Mono",
+    cssVariable: "--font-ubuntu-mono",
   }],
 
-  adapter: process.env.NETLIFY ? netlify() : node({ mode: 'standalone' })
+  adapter: netlify()
 });
