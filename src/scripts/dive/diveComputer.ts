@@ -1,4 +1,4 @@
-import { MAX_DEPTH, maxScroll, pageDepth } from "./stage.ts";
+import { MAX_DEPTH, maxScroll, pageDepth, scrollToEl } from "./stage.ts";
 
 // The dive computer HUD: depth, water temperature, dive time, and a gauge whose stops jump to each section.
 export function startDiveComputer(root: HTMLElement) {
@@ -31,7 +31,7 @@ export function startDiveComputer(root: HTMLElement) {
       b.className = "stopdot";
       b.style.top = `${(m / MAX_DEPTH) * 100}%`;
       b.textContent = `${m.toFixed(0).padStart(2, " ")} m  ${el.dataset.stop}`;
-      b.addEventListener("click", () => el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
+      b.addEventListener("click", () => scrollToEl(el));
       gauge.appendChild(b);
       const lbl = el.querySelector("[data-depth-label]");
       if (lbl) lbl.textContent = `// -${m.toFixed(0)} m`;
@@ -79,18 +79,4 @@ export function startDiveComputer(root: HTMLElement) {
   addEventListener("resize", layout);
   layout();
   update();
-}
-
-// safety stop countdown, runs while the contact section is in view
-export function startSafetyStop(timerEl: HTMLElement) {
-  let left = 180;
-  let visible = false;
-  new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.4 }).observe(
-    timerEl.closest("section, footer") ?? timerEl,
-  );
-  setInterval(() => {
-    if (!visible || left <= 0) return;
-    left--;
-    timerEl.textContent = left ? `${(left / 60) | 0}:${String(left % 60).padStart(2, "0")}` : "OK, surface !";
-  }, 1000);
 }

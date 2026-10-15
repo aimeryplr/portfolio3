@@ -19,7 +19,7 @@ const FRAG = `precision highp float;
 uniform float iTime; uniform vec2 iResolution; uniform vec2 rayPos; uniform vec2 rayDir;
 uniform vec3 raysColor; uniform float raysSpeed; uniform float lightSpread; uniform float rayLength;
 uniform float fadeDistance; uniform vec2 mousePos; uniform float mouseInfluence;
-uniform float noiseAmount; uniform float distortion;
+uniform float noiseAmount; uniform float distortion; uniform float scrollY;
 float noise(vec2 st){ return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123); }
 float rayStrength(vec2 raySource, vec2 rayRefDirection, vec2 coord, float seedA, float seedB, float speed){
   vec2 sourceToCoord = coord - raySource;
@@ -45,7 +45,7 @@ void main(){
   vec4 c = vec4(1.0) * rayStrength(rayPos, finalRayDir, coord, 36.2214, 21.11349, 1.5 * raysSpeed) * 0.5
          + vec4(1.0) * rayStrength(rayPos, finalRayDir, coord, 22.3991, 18.0234, 1.1 * raysSpeed) * 0.4;
   if (noiseAmount > 0.0) { float n = noise(coord * 0.01 + iTime * 0.1); c.rgb *= (1.0 - noiseAmount + noiseAmount * n); }
-  float brightness = 1.0 - (coord.y / iResolution.y);
+  float brightness = max(0.0, 1.0 - ((coord.y + scrollY) / iResolution.y));
   c.x *= 0.1 + brightness * 0.8; c.y *= 0.3 + brightness * 0.6; c.z *= 0.5 + brightness * 0.5;
   c.rgb *= raysColor;
   gl_FragColor = c;
@@ -53,7 +53,7 @@ void main(){
 
 const UNIFORMS = [
   "iTime", "iResolution", "rayPos", "rayDir", "raysColor", "raysSpeed", "lightSpread",
-  "rayLength", "fadeDistance", "mousePos", "mouseInfluence", "noiseAmount", "distortion",
+  "rayLength", "fadeDistance", "mousePos", "mouseInfluence", "noiseAmount", "distortion", "scrollY",
 ] as const;
 
 export function createLightRays(canvas: HTMLCanvasElement) {
@@ -104,19 +104,24 @@ export function createLightRays(canvas: HTMLCanvasElement) {
       canvas.height = stage.H * stage.DPR;
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2fv(u.iResolution, [canvas.width, canvas.height]);
-      gl.uniform2fv(u.rayPos, [0.5 * canvas.width, -0.2 * canvas.height]);
     },
     draw(time: number) {
-      // sunlight only reaches the first meters
-      const fade = Math.max(0, 1 - stage.depth * 1.6);
+      // single-screen pages don't scroll, so the light fades with their depth instead
+      const fade = stage.fixedDepth === null ? 1 : Math.max(0, 1 - stage.depth * 1.6);
       canvas.style.opacity = fade.toFixed(3);
-      if (fade <= 0) return; // nothing visible down deep: skip the GPU work
+      // the sun hangs above the top of the page and scrolls away with it
+      const scroll = scrollY * stage.DPR;
+      const source = -0.2 * canvas.height - scroll;
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      // past the rays' reach, or faded out: skip the GPU work
+      if (fade <= 0 || -source > canvas.width * RAYS.length) return;
       m.sx = m.sx * 0.92 + m.x * 0.08;
       m.sy = m.sy * 0.92 + m.y * 0.08;
       gl.uniform1f(u.iTime, time);
       gl.uniform2fv(u.mousePos, [m.sx, m.sy]);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform2fv(u.rayPos, [0.5 * canvas.width, source]);
+      gl.uniform1f(u.scrollY, scroll);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     },
   };

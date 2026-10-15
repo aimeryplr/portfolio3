@@ -1,5 +1,7 @@
 import { anglers, drawAngler, spawnAnglers, stepAngler } from "./angler.ts";
-import { drawFish, fish, spawnFish, stepFish } from "./fish.ts";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+import { drawFish, fish, fishScreenY, spawnFish, stepFish } from "./fish.ts";
 import { createLightRays } from "./lightRays.ts";
 import { buildMesh, drawMesh } from "./mesh.ts";
 import { smooth } from "./palette.ts";
@@ -7,7 +9,7 @@ import { buildOutcrops, drawOutcrops } from "./outcrops.ts";
 import { buildReef, drawReef } from "./reef.ts";
 import { burst, drawBubbles, drawSnow } from "./particles.ts";
 import { drawShark, sharks, stepShark } from "./shark.ts";
-import { MAX_DEPTH, measure, mouse, onScreen, setCtx, stage } from "./stage.ts";
+import { MAX_DEPTH, measure, mouse, onScreen, setCtx, setScroller, stage } from "./stage.ts";
 
 // a school sized to the screen: 18 on a desktop, a handful on a phone,
 // plus a crowd near the surface so the top of the page is busy
@@ -25,6 +27,9 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   stage.fixedDepth = fixedDepth;
   stage.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rays = createLightRays(raysCanvas);
+  // the wheel scroll is stepped from this loop, so the canvas never lags a frame behind the page
+  const lenis = stage.reduced || fixedDepth !== null ? null : new Lenis({ anchors: true });
+  setScroller(lenis);
 
   addEventListener("pointermove", (e) => {
     mouse.x = e.clientX;
@@ -45,13 +50,15 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   function draw(now: number) {
     const dt = stage.reduced ? 1 : Math.min(3, (now - last) / 16.67);
     last = now;
+    lenis?.raf(now);
     const time = stage.reduced ? 0 : now / 1000;
     const scrollDy = scrollY - lastScroll;
     lastScroll = scrollY;
     measure();
-    // fonts and hydrating islands change the page height, and the reef is laid out against it
+    // fonts and hydrating islands change the page height, and the water and reef are laid out against it
     if (stage.docH !== reefDocH) {
       reefDocH = stage.docH;
+      buildMesh();
       buildReef();
       buildOutcrops();
     }
@@ -66,25 +73,36 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
       stepFish(dt);
       for (const a of anglers) stepAngler(a, dt, time);
     }
-    // creatures are drawn in page coordinates, shifted by the scroll, and only when visible
+    // creatures are drawn in page coordinates, shifted by the scroll, and only when visible;
+    // fish place themselves on screen with their own parallax
     const inWorld = (fn: () => void) => {
       g!.save();
       g!.translate(0, -scrollY);
       fn();
       g!.restore();
     };
+    const drawLayer = (layer: number) => {
+      for (const f of fish) {
+        const y = fishScreenY(f);
+        if (f.layer === layer && y > -80 && y < stage.H + 80) drawFish(f);
+      }
+    };
+    // far school behind the reef, mid school among it, near school over everything
+    drawLayer(0);
     inWorld(() => {
       drawReef(time);
       drawOutcrops(time);
-      for (const f of fish) if (f.z < 0.5 && onScreen(f.y, 80)) drawFish(f);
     });
+    drawLayer(1);
     drawSnow(time, stage.reduced ? 0 : dt, stage.reduced ? 0 : scrollDy, deep);
     inWorld(() => {
       for (const s of sharks) if (onScreen(s.y, s.len)) drawShark(s);
-      for (const f of fish) if (f.z >= 0.5 && onScreen(f.y, 80)) drawFish(f);
+    });
+    drawLayer(2);
+    inWorld(() => {
       for (const a of anglers) if (onScreen(a.y, a.size * 3)) drawAngler(a, time);
     });
-    drawBubbles(time, stage.reduced ? 0 : dt);
+    drawBubbles(time, stage.reduced ? 0 : dt, scrollDy);
   }
 
   function loop(now: number) {
@@ -99,8 +117,8 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
     ocean.width = stage.W * stage.DPR;
     ocean.height = stage.H * stage.DPR;
     rays.resize();
-    buildMesh();
     measure();
+    buildMesh();
     buildReef();
     buildOutcrops();
     reefDocH = stage.docH;

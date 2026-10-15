@@ -88,6 +88,20 @@ export function clampTo(c: Body, [top, bottom]: Band, pad: number) {
 
 export const onScreen = (y: number, pad: number) => y - scrollY > -pad && y - scrollY < stage.H + pad;
 
+// Parallax: a creature with factor k scrolls at k times the page speed. The mapping scales around
+// the middle of the screen, so a creature still passes mid-screen at its own depth and stays in its band.
+export const parallaxY = (y: number, k: number) =>
+  stage.fixedDepth === null ? stage.H / 2 + (y - scrollY - stage.H / 2) * k : y - scrollY;
+
+// Lenis drives the scroll from the ocean's frame loop, so the page and the canvas move in the same frame.
+// It is absent with reduced motion and on single-screen pages, where native scrolling is used.
+let smoothScroller: { scrollTo(target: HTMLElement): void } | null = null;
+export const setScroller = (s: typeof smoothScroller) => (smoothScroller = s);
+export function scrollToEl(el: HTMLElement) {
+  if (smoothScroller) smoothScroller.scrollTo(el);
+  else el.scrollIntoView({ behavior: stage.reduced ? "auto" : "smooth" });
+}
+
 // water color behind a screen y
 export const waterAtY = (y: number) => water(stage.depth * 0.85 + (y / stage.H) * 0.3);
 

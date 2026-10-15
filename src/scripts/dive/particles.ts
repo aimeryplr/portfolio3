@@ -69,7 +69,8 @@ export function burst(x: number, y: number) {
   }
 }
 
-export function drawBubbles(time: number, dt: number) {
+// bubbles live on screen but are carried by the page: a scroll moves them like the content around them
+export function drawBubbles(time: number, dt: number, scrollDy: number) {
   const g = ctx();
   streamTimer += dt / 60;
   if (!stage.reduced && streamTimer > nextStream) {
@@ -78,7 +79,9 @@ export function drawBubbles(time: number, dt: number) {
     spawnStream();
   }
   g.lineWidth = 1;
-  bubbles = bubbles.filter((b) => b.y > -30);
+  for (const b of bubbles) b.y -= scrollDy;
+  // streams start just under the screen, so keep some room below before dropping a bubble
+  bubbles = bubbles.filter((b) => b.y > -30 && b.y < stage.H + 400);
   for (const b of bubbles) {
     b.vy -= 0.004 * dt;
     b.vx *= 0.98;
