@@ -2,7 +2,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Image} from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import {faArrowDown} from "@fortawesome/free-solid-svg-icons";
+import {faArrowDown, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {getCollection} from "astro:content";
 import {ProjectType, ProjectTypeNames} from "../enum/projects.ts";
 import ProjectPreview from '../components/Projects/ProjectPreview.tsx';
@@ -19,13 +19,17 @@ const projectTypes = Object.values(ProjectType);
     <Ocean />
     <main class="dive-column">
         <section class="hero" data-stop="Surface">
-            <div class="prompt">aimery@portfolio:~$ dive --max-depth 40m <span class="prompt-cursor"></span></div>
+            <div class="prompt">aimery@portfolio:~$ <span class="prompt-command">dive --max-depth 40m</span> <span class="prompt-cursor"></span></div>
             <h1>
                 <span class="hero-title">DÉVELOPPEUR FULL STACK</span>
                 <span class="hero-name">Aimery PELLERIN</span>
             </h1>
             <p>Développer et relever des défis complexes en informatique me passionne. Chaque nouveau projet est une nouvelle opportunité pour apprendre et perfectionner mes compétences. Je me spécialise dans le développement Node.js, et plus particulièrement React / NestJS.</p>
             <p>Le niveau 1 de plongée sous marine en poche, j'aimerais parcourir le dessous des océans partout dans le monde, ce portfolio est à cette image.</p>
+            <a class="button button--primary cv-button" href="/aimery-pellerin-cv.pdf" download="Aimery-Pellerin-CV.pdf">
+                <FontAwesomeIcon icon={faDownload} className='w-3.5 h-3.5'/>
+                Télécharger mon CV
+            </a>
             <div class="descend">
                 <FontAwesomeIcon icon={faArrowDown} className='w-3.5 h-3.5'/>
                 Projets

@@ -8,14 +8,7 @@ import ContactForm from "./ContactForm.tsx";
     <span class="eyebrow" data-depth-label></span>
   </div>
   <div class="eyebrow">Palier de sécurité · 5 m</div>
-  <div class="safety-timer" id="safety-timer">3:00</div>
   <div class="card max-w-136">
     <ContactForm client:visible />
   </div>
 </footer>
-
-<script>
-  import { startSafetyStop } from "../../scripts/dive/diveComputer.ts";
-
-  startSafetyStop(document.getElementById("safety-timer")!);
-</script>
