@@ -42,5 +42,6 @@ export default defineConfig({
     },
   },
 
-  adapter: netlify()
+  // the site has no edge functions, and their dev emulation sometimes fails to start its Deno server
+  adapter: netlify({devFeatures: {edgeFunctions: false}})
 });
