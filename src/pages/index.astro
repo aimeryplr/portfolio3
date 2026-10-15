@@ -4,13 +4,17 @@ import {Image} from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {faArrowDown, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {getCollection} from "astro:content";
+import projectsData from "../data/projects.json";
 import {ProjectType, ProjectTypeNames} from "../enum/projects.ts";
 import ProjectPreview from '../components/Projects/ProjectPreview.tsx';
 import Footer from '../components/Contact/Footer.astro';
 import Ocean from '../components/Dive/Ocean.astro';
 import DiveComputer from '../components/Dive/DiveComputer.astro';
 
-const projects = await getCollection('projects');
+// The data store doesn't keep the file's order, so sort back to the order of projects.json
+const projectOrder = projectsData.map((project) => project.id);
+const projects = (await getCollection('projects'))
+    .sort((a, b) => projectOrder.indexOf(a.id) - projectOrder.indexOf(b.id));
 const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, '-');
 const projectTypes = Object.values(ProjectType);
 ---
