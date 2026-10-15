@@ -1,0 +1,27 @@
+---
+// Fixed low-poly ocean behind the whole page: water mesh, god rays, fish, shark, anglerfish, bubbles.
+---
+
+<canvas id="ocean" class="ocean-layer" aria-hidden="true"></canvas>
+<canvas id="rays" class="ocean-layer mix-blend-screen" aria-hidden="true"></canvas>
+
+<script>
+  import { startOcean } from "../../scripts/dive/ocean.ts";
+
+  startOcean(
+    document.getElementById("ocean") as HTMLCanvasElement,
+    document.getElementById("rays") as HTMLCanvasElement,
+  );
+</script>
+
+<style>
+  .ocean-layer {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
+  }
+</style>

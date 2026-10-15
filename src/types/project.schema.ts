@@ -9,6 +9,7 @@ export const projectSchema = ({image}: SchemaContext) => z.object({
   technologies: z.array(z.enum(Object.values(Technologies))),
   people: z.int(),
   type: z.enum(Object.values(ProjectType)),
+  company: z.string().optional(),
   preview: image(),
   website: z.url().optional(),
   code: z.url().optional(),

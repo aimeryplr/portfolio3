@@ -13,12 +13,13 @@ const {title = 'Aimery'} = Astro.props
 <head>
     <meta charset="utf-8"/>
     <link rel="icon" href="/favicon.png"/>
-    <meta name="viewport" content="width=device-width"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta name="generator" content={Astro.generator}/>
     <Font cssVariable="--font-ubuntu" preload />
+    <Font cssVariable="--font-ubuntu-mono" />
     <title>{title}</title>
 </head>
-<body class="bg-background w-full min-h-svh">
+<body class="bg-background w-full min-h-svh overflow-x-hidden">
     <slot/>
 </body>
 </html>

@@ -1,0 +1,167 @@
+---
+// Dive computer HUD: pressure, depth, temperature, dive time, and a gauge listing every [data-stop] section, ridden by a tiny diver.
+
+---
+
+<div class="hud" id="dive-computer" aria-label="Ordinateur de plongée">
+  <div class="readout">
+    <div><div class="lbl">PRESS</div><div class="val" data-hud-press>1.0<small> bar</small></div></div>
+    <div><div class="lbl">PROF</div><div class="val" data-hud-depth>0.0<small> m</small></div></div>
+    <div><div class="lbl">TEMP</div><div class="val" data-hud-temp>26<small>°C</small></div></div>
+    <div><div class="lbl">DIVE</div><div class="val" data-hud-time>00:00</div></div>
+  </div>
+  <div class="gauge-wrap"><div class="gauge" data-gauge><div class="marker" data-marker>
+        <svg class="diver" viewBox="-36 -16 72 32" aria-hidden="true" data-diver>
+          <g data-fins>
+            <polygon points="-25,-4 -35,-9 -31,-1" class="fin" />
+            <polygon points="-25,1 -31,-1 -34,6" class="fin dark" />
+          </g>
+          <polygon points="-25,-4 -13,-6 -13,3 -25,1" class="suit dark" />
+          <polygon points="-13,-6 9,-7 13,-2 -13,-1" class="suit" />
+          <polygon points="-13,-1 13,-2 10,4 -13,3" class="suit dark" />
+          <polygon points="-11,-11 5,-11 8,-8 5,-6 -11,-6" class="tank" />
+          <polygon points="9,1 18,5 16,8 7,4" class="suit dark" />
+          <polygon points="13,-6 19,-7 22,-2 18,3 13,1" class="suit" />
+          <polygon points="18,-5 23,-4 23,0 19,0" class="mask" />
+        </svg>
+      </div></div></div>
+</div>
+
+<script>
+  import { startDiveComputer } from "../../scripts/dive/diveComputer.ts";
+
+  startDiveComputer(document.getElementById("dive-computer")!);
+</script>
+
+<style>
+  .hud {
+    position: fixed;
+    z-index: 30;
+    right: calc(18px + env(safe-area-inset-right, 0px));
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    color: var(--foreground);
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+    pointer-events: none;
+  }
+  .gauge-wrap {
+    position: relative;
+    padding-right: 150px;
+  }
+  .gauge {
+    position: relative;
+    width: 2px;
+    background: var(--edge);
+    height: 46vh;
+  }
+  .gauge :global(.tick) {
+    position: absolute;
+    right: 0;
+    height: 1px;
+    background: var(--edge);
+  }
+  .marker {
+    position: absolute;
+    left: -31px;
+    width: 64px;
+    height: 29px;
+    transform: translateY(-50%);
+  }
+  .diver {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 2px 5px rgba(0, 10, 30, 0.5));
+  }
+  .suit {
+    fill: #cfe3ee;
+  }
+  .suit.dark {
+    fill: #8fb0c2;
+  }
+  .tank {
+    fill: #f5b942;
+  }
+  .mask,
+  .fin {
+    fill: var(--accent);
+  }
+  [data-fins] {
+    transform-box: fill-box;
+    transform-origin: right center;
+  }
+  .fin.dark {
+    fill: color-mix(in oklab, var(--accent) 65%, black);
+  }
+  .gauge :global(.stopdot) {
+    position: absolute;
+    left: 40px;
+    transform: translateY(-50%);
+    white-space: pre;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--foreground);
+    pointer-events: auto;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    font-family: inherit;
+    padding: 2px 0;
+  }
+  .gauge :global(.stopdot:hover),
+  .gauge :global(.stopdot:focus-visible) {
+    color: var(--accent);
+    outline: none;
+  }
+  .readout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    min-width: 92px;
+    order: -1;
+    text-align: right;
+  }
+  .lbl {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .val {
+    font-size: 22px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .val :global(small) {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* not enough room beside the 920px column: tuck the readout at the bottom */
+  @media (max-width: 1400px) {
+    .hud {
+      top: auto;
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      transform: none;
+    }
+    .gauge-wrap {
+      display: none;
+    }
+    .readout {
+      flex-direction: row;
+      gap: 14px;
+      min-width: 0;
+      background: color-mix(in oklab, var(--background) 75%, transparent);
+      border: 1px solid var(--edge);
+      padding: 8px 10px;
+      border-radius: 4px;
+      backdrop-filter: blur(8px);
+    }
+    .val {
+      font-size: 16px;
+    }
+  }
+</style>

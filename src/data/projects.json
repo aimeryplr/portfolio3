@@ -7,7 +7,18 @@
     "people": 4,
     "preview": "./k-hubs/preview.png",
     "website": "https://k-hubs.com",
-    "type": "professional"
+    "type": "professional",
+    "company": "Mobiteach"
+  },
+  {
+    "id": "North Wind Airsoft",
+    "name": "North Wind Airsoft",
+    "description": "Site vitrine d'une association d'airsoft du Pas-de-Calais, pensé mobile d'abord pour amener les nouveaux joueurs jusqu'au groupe WhatsApp. Les membres de l'asso modifient eux-mêmes textes, photos, tarifs et horaires depuis un back-office Sanity, sans toucher au code. Rendu par Astro sur Cloudflare Workers.",
+    "technologies": ["astro", "ts", "sanity", "cloudflare"],
+    "people": 1,
+    "preview": "./north-wind/preview.png",
+    "website": "https://northwind-airsoft.fr",
+    "type": "freelance"
   },
   {
     "id": "Koridor",
@@ -17,7 +28,19 @@
     "people": 1,
     "preview": "./koridor/preview.png",
     "website": "https://k-hubs.com",
-    "type": "professional"
+    "type": "professional",
+    "company": "Mobiteach"
+  },
+  {
+    "id": "Like my Prez",
+    "name": "Like my Prez",
+    "description": "Présentation interactive en direct : le public suit les slides depuis son téléphone, réagit avec des émojis et répond aux sondages en temps réel.",
+    "technologies": ["react", "socket-io"],
+    "people": 1,
+    "preview": "./like-my-prez/preview.png",
+    "website": "https://k-hubs.com",
+    "type": "professional",
+    "company": "Mobiteach"
   },
   {
     "id": "Nomadio",

@@ -2,7 +2,20 @@
 import ContactForm from "./ContactForm.tsx";
 ---
 
-<footer class="w-full flex flex-col items-center gap-6 py-16 px-8 bg-background border-t border-separator">
-  <h2 class="text-2xl font-bold">Me contacter</h2>
-  <ContactForm client:load />
+<footer class="dive-column safety" data-stop="Contact" data-seabed>
+  <div class="stop-head">
+    <h2>Me contacter</h2>
+    <span class="eyebrow" data-depth-label></span>
+  </div>
+  <div class="eyebrow">Palier de sécurité · 5 m</div>
+  <div class="safety-timer" id="safety-timer">3:00</div>
+  <div class="card max-w-136">
+    <ContactForm client:visible />
+  </div>
 </footer>
+
+<script>
+  import { startSafetyStop } from "../../scripts/dive/diveComputer.ts";
+
+  startSafetyStop(document.getElementById("safety-timer")!);
+</script>

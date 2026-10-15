@@ -12,4 +12,7 @@ export enum Technologies {
   KOTLIN = 'kotlin',
   GRAPHQL = 'graphql',
   CRYPTOCURRENCY = 'cryptocurrency',
+  ASTRO = 'astro',
+  SANITY = 'sanity',
+  CLOUDFLARE = 'cloudflare',
 }
