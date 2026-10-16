@@ -128,8 +128,12 @@ main.dive-column {
 @keyframes prompt-blink {
     50% { opacity: 0; }
 }
+.hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 .cv-button {
-    align-self: flex-start;
     gap: 10px;
 }
 .descend {

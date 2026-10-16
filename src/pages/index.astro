@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Image} from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {faArrowDown, faDownload} from "@fortawesome/free-solid-svg-icons";
+import {faGithub, faLinkedinIn} from "@fortawesome/free-brands-svg-icons";
 import {getCollection} from "astro:content";
 import projectsData from "../data/projects.json";
 import {ProjectType, ProjectTypeNames} from "../enum/projects.ts";
@@ -30,10 +31,18 @@ const projectTypes = Object.values(ProjectType);
             </h1>
             <p>Développer et relever des défis complexes en informatique me passionne. Chaque nouveau projet est une nouvelle opportunité pour apprendre et perfectionner mes compétences. Je me spécialise dans le développement Node.js, et plus particulièrement React / NestJS.</p>
             <p>Le niveau 1 de plongée sous marine en poche, j'aimerais parcourir le dessous des océans partout dans le monde, ce portfolio est à cette image.</p>
-            <a class="button button--primary cv-button" href="/aimery-pellerin-cv.pdf" download="Aimery-Pellerin-CV.pdf">
-                <FontAwesomeIcon icon={faDownload} className='w-3.5 h-3.5'/>
-                Télécharger mon CV
-            </a>
+            <div class="hero-links">
+                <a class="button button--primary cv-button" href="/aimery-pellerin-cv.pdf" download="Aimery-Pellerin-CV.pdf">
+                    <FontAwesomeIcon icon={faDownload} className='w-3.5 h-3.5'/>
+                    Télécharger mon CV
+                </a>
+                <a class="button button--primary button--icon-only" href="https://www.linkedin.com/in/aimery-pellerin-9a0596238" target="_blank" rel="noopener noreferrer me" aria-label="LinkedIn">
+                    <FontAwesomeIcon icon={faLinkedinIn} className='w-4 h-4'/>
+                </a>
+                <a class="button button--primary button--icon-only" href="https://github.com/aimeryplr" target="_blank" rel="noopener noreferrer me" aria-label="GitHub">
+                    <FontAwesomeIcon icon={faGithub} className='w-4 h-4'/>
+                </a>
+            </div>
             <div class="descend">
                 <FontAwesomeIcon icon={faArrowDown} className='w-3.5 h-3.5'/>
                 Projets
