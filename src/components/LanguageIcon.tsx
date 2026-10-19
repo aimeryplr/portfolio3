@@ -2,7 +2,7 @@ import type { Technologies } from "../enum/technologies.ts";
 
 import astro from "../icons/technologies/astro.svg?raw";
 import cloudflare from "../icons/technologies/cloudflare.svg?raw";
-import cryptocurrency from "../icons/technologies/cryptocurrency.svg?raw";
+import ethers from "../icons/technologies/ethers.svg?raw";
 import docker from "../icons/technologies/docker.svg?raw";
 import graphql from "../icons/technologies/graphql.svg?raw";
 import kotlin from "../icons/technologies/kotlin.svg?raw";
@@ -17,7 +17,7 @@ import ts from "../icons/technologies/ts.svg?raw";
 const icons: Record<string, string> = {
   astro,
   cloudflare,
-  cryptocurrency,
+  ethers,
   docker,
   graphql,
   kotlin,

@@ -73,20 +73,20 @@ export default function ContactForm() {
         aria-hidden="true"
         className="absolute -left-[9999px] h-px w-px opacity-0"
       />
-      <TextField name="name" type="text" isRequired maxLength={100} className="flex flex-col gap-1">
+      <TextField name="name" type="text" isRequired maxLength={100}>
         <Label>Nom</Label>
         <Input />
-        <FieldError className="text-danger text-sm" />
+        <FieldError />
       </TextField>
-      <TextField name="email" type="email" isRequired maxLength={254} className="flex flex-col gap-1">
+      <TextField name="email" type="email" isRequired maxLength={254}>
         <Label>Email</Label>
         <Input />
-        <FieldError className="text-danger text-sm" />
+        <FieldError />
       </TextField>
-      <TextField name="message" isRequired maxLength={5000} className="flex flex-col gap-1">
+      <TextField name="message" isRequired maxLength={5000}>
         <Label>Message</Label>
         <TextArea rows={5} className="resize-none" />
-        <FieldError className="text-danger text-sm" />
+        <FieldError />
       </TextField>
       {status === "error" && (
         <Alert status="danger">

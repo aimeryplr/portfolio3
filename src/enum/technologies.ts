@@ -11,7 +11,7 @@ export enum Technologies {
   SOCKET_IO = 'socket-io',
   KOTLIN = 'kotlin',
   GRAPHQL = 'graphql',
-  CRYPTOCURRENCY = 'cryptocurrency',
+  ETHERS = 'ethers',
   ASTRO = 'astro',
   SANITY = 'sanity',
   CLOUDFLARE = 'cloudflare',

@@ -17,11 +17,11 @@ import ErrorScreen from "../components/Dive/ErrorScreen.astro";
 >
     <p>Quelque chose a cassé de notre côté, pas du vôtre. Réessayez dans un instant ; si le problème persiste, l'accueil reste accessible.</p>
     <Fragment slot="actions">
-        <button type="button" class="project-link project-link-primary" data-retry>
+        <button type="button" class="button button--primary" data-retry>
             <FontAwesomeIcon icon={faRotateRight} className='w-3.5 h-3.5'/>
             Réessayer
         </button>
-        <a href="/" class="project-link">
+        <a href="/" class="button button--outline">
             <FontAwesomeIcon icon={faArrowUp} className='w-3.5 h-3.5'/>
             Remonter à la surface
         </a>

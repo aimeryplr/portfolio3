@@ -1,14 +1,14 @@
 ---
 import ContactForm from "./ContactForm.tsx";
+import { Card } from "@heroui/react/card";
+import DiveColumn from "../Dive/DiveColumn.astro";
+import StopHead from "../Dive/StopHead.astro";
 ---
 
-<footer class="dive-column safety" data-stop="Contact" data-seabed>
-  <div class="stop-head">
-    <h2>Me contacter</h2>
-    <span class="eyebrow" data-depth-label></span>
-  </div>
-  <div class="eyebrow">Palier de sécurité · 5 m</div>
-  <div class="card max-w-136">
+<DiveColumn as="footer" class="gap-3.5 pt-10 pb-30" data-stop="Contact" data-seabed>
+  <StopHead title="Me contacter" />
+  <div class="font-mono text-[14px] tracking-[0.06em] text-accent opacity-85">Palier de sécurité · 5 m</div>
+  <Card className="mt-3 max-w-136 items-center" data-card>
     <ContactForm client:visible />
-  </div>
-</footer>
+  </Card>
+</DiveColumn>

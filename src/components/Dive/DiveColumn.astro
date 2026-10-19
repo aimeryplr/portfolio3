@@ -1,0 +1,14 @@
+---
+// The 920px page column over the ocean.
+interface Props {
+  as?: "main" | "footer";
+  class?: string;
+  [attr: string]: unknown;
+}
+
+const { as: Tag = "main", class: className, ...attrs } = Astro.props;
+---
+
+<Tag class:list={["relative z-1 mx-auto flex max-w-[920px] flex-col px-[max(16px,env(safe-area-inset-left,0px))]", className]} {...attrs}>
+  <slot />
+</Tag>

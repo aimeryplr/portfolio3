@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Chip } from "@heroui/react/chip";
 
 interface Props {
   children: ReactNode;
@@ -7,9 +8,9 @@ interface Props {
 
 export default function ProjectBadge({ children, title }: Props) {
   return (
-    <span className="tag">
+    <Chip color="accent" variant="tertiary" className="gap-1.5 border font-mono font-bold text-[13px]">
       {children}
-      {title}
-    </span>
+      <Chip.Label>{title}</Chip.Label>
+    </Chip>
   );
 }

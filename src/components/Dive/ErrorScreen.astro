@@ -2,6 +2,9 @@
 // Full-screen error (404, 500) over the ocean, written like the hero: a failed command, a title, a way back up.
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Ocean from "./Ocean.astro";
+import DiveColumn from "./DiveColumn.astro";
+import HeroTitle from "./HeroTitle.astro";
+import PromptCursor from "./PromptCursor.astro";
 
 interface Props {
   code: number;
@@ -15,91 +18,37 @@ interface Props {
 }
 
 const { code, title, subtitle, command, error, depth, oceanDepth } = Astro.props;
+
+const readout = [
+  { label: "CODE", value: code },
+  { label: "PROF", value: depth, unit: " m" },
+  { label: "ACTION", value: "REMONTER" },
+];
 ---
 
 <BaseLayout title={`${code} · ${subtitle}`} noindex>
   <Ocean depth={oceanDepth} />
-  <main class="dive-column">
-    <section class="hero lost">
-      <div class="prompt">
+  <DiveColumn>
+    <section class="flex min-h-svh flex-col justify-center gap-[22px] py-[60px] [&_p]:max-w-[60ch] [&_p]:opacity-92">
+      <div class="flex flex-col gap-1 font-mono text-[15px] text-accent">
         <div data-command>aimery@portfolio:~$ {command}</div>
-        <div class="prompt-error">{error}</div>
-        <div>aimery@portfolio:~$ <span class="prompt-cursor"></span></div>
+        <div class="text-warning">{error}</div>
+        <div>aimery@portfolio:~$ <PromptCursor /></div>
       </div>
-      <h1>
-        <span class="hero-title">{title}</span>
-        <span class="hero-name">{subtitle}</span>
-      </h1>
+      <HeroTitle title={title} name={subtitle} />
       <slot />
-      <div class="readout card">
-        <div><div class="lbl">CODE</div><div class="val">{code}</div></div>
-        <div><div class="lbl">PROF</div><div class="val">{depth}<small> m</small></div></div>
-        <div><div class="lbl">ACTION</div><div class="val">REMONTER</div></div>
+      <div class="card card--default flex-row flex-wrap gap-7 self-start border px-[18px] py-3 font-mono">
+        {readout.map(({ label, value, unit }) => (
+          <div>
+            <div class="text-[11px] tracking-[0.12em] text-muted">{label}</div>
+            <div class="text-[22px] leading-none tabular-nums">{value}{unit && <small class="text-[13px] text-muted">{unit}</small>}</div>
+          </div>
+        ))}
       </div>
-      <div class="actions">
+      <div class="mt-1.5 flex flex-wrap gap-3">
         <slot name="actions" />
       </div>
     </section>
-  </main>
+  </DiveColumn>
 </BaseLayout>
 
-<style>
-  .lost {
-    min-height: 100svh;
-    padding-block: 60px;
-  }
-  .prompt {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .prompt-error {
-    color: var(--warning);
-  }
-  .readout {
-    flex: none;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 28px;
-    align-self: flex-start;
-    padding: 12px 18px;
-    font-family: var(--font-mono);
-  }
-  .readout:hover {
-    transform: none;
-    border-color: var(--edge);
-  }
-  .lbl {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-  }
-  .val {
-    font-size: 22px;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-  .val small {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 6px;
-  }
-  .actions :global(.project-link) {
-    width: auto;
-    height: 40px;
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    padding: 0 16px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-  }
-</style>

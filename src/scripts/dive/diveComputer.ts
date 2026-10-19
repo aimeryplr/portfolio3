@@ -17,10 +17,11 @@ export function startDiveComputer(root: HTMLElement) {
     Math.max(0, Math.min(MAX_DEPTH, ((el.offsetTop - innerHeight * 0.3) / maxScroll()) * MAX_DEPTH));
 
   function layout() {
-    gauge.querySelectorAll(".tick, .stopdot").forEach((n) => n.remove());
+    gauge.querySelectorAll("[data-tick], [data-stopdot]").forEach((n) => n.remove());
     for (let m = 0; m <= MAX_DEPTH; m += 5) {
       const t = document.createElement("div");
-      t.className = "tick";
+      t.dataset.tick = "";
+      t.className = "absolute right-0 h-px bg-border";
       t.style.top = `${(m / MAX_DEPTH) * 100}%`;
       t.style.width = m % 10 ? "5px" : "9px";
       gauge.appendChild(t);
@@ -28,7 +29,8 @@ export function startDiveComputer(root: HTMLElement) {
     for (const el of stops) {
       const m = metersFor(el);
       const b = document.createElement("button");
-      b.className = "stopdot";
+      b.dataset.stopdot = "";
+      b.className = "pointer-events-auto absolute left-10 -translate-y-1/2 cursor-pointer py-0.5 text-[13px] font-semibold whitespace-pre text-foreground hover:text-accent focus-visible:text-accent focus-visible:outline-none";
       b.style.top = `${(m / MAX_DEPTH) * 100}%`;
       b.textContent = `${m.toFixed(0).padStart(2, " ")} m  ${el.dataset.stop}`;
       b.addEventListener("click", () => scrollToEl(el));

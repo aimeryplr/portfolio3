@@ -1,5 +1,6 @@
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { buttonVariants } from "@heroui/react/button";
 
 interface Props {
   icon: IconDefinition;
@@ -11,14 +12,14 @@ interface Props {
 export default function ProjectLink({ icon, link, label, primary }: Props) {
   if (primary) {
     return (
-      <a className="project-link project-link-primary" href={link} target="_blank" rel="noopener noreferrer">
+      <a className={buttonVariants({ size: "sm", variant: 'outline' })} href={link} target="_blank" rel="noopener noreferrer">
         {label}
         <FontAwesomeIcon className="w-3 h-3" icon={icon} />
       </a>
     );
   }
   return (
-    <a className="project-link" href={link} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
+    <a className={buttonVariants({ variant: "outline", size: "sm", isIconOnly: true })} href={link} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
       <FontAwesomeIcon className="w-4 h-4" icon={icon} />
     </a>
   );

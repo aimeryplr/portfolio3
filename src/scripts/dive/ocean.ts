@@ -51,6 +51,7 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
   let last = performance.now();
   let lastScroll = scrollY;
   let reefDocH = 0;
+  let cssDepth = -1;
 
   function draw(now: number) {
     const dt = stage.reduced ? 1 : Math.min(3, (now - last) / 16.67);
@@ -60,6 +61,11 @@ export function startOcean(ocean: HTMLCanvasElement, raysCanvas: HTMLCanvasEleme
     const scrollDy = scrollY - lastScroll;
     lastScroll = scrollY;
     measure();
+    // the card glass follows the water's color; only written when it moves, since it restyles the page
+    if (Math.abs(stage.depth - cssDepth) > 0.004) {
+      cssDepth = stage.depth;
+      document.documentElement.style.setProperty("--depth", cssDepth.toFixed(3));
+    }
     // fonts and hydrating islands change the page height, and the water and reef are laid out against it
     if (stage.docH !== reefDocH) {
       reefDocH = stage.docH;

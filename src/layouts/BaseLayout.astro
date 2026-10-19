@@ -47,7 +47,7 @@ const structuredData = {
 };
 ---
 
-<html lang="fr" class="dark" data-theme="dark">
+<html lang="fr" class="dark [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-theme="dark">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
@@ -80,7 +80,7 @@ const structuredData = {
 
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(structuredData)}/>}
 </head>
-<body class="bg-background w-full min-h-svh overflow-x-hidden">
+<body class="bg-background text-foreground w-full min-h-svh overflow-x-hidden">
     <slot/>
 </body>
 </html>

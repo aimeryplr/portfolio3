@@ -1,0 +1,13 @@
+---
+interface Props {
+  title: string;
+  name: string;
+}
+
+const { title, name } = Astro.props;
+---
+
+<h1>
+  <span class="block text-[clamp(30px,5vw,52px)] leading-[1.05] font-bold tracking-[-0.01em]">{title}</span>
+  <span class="block text-[clamp(18px,2.4vw,24px)] font-semibold text-accent">{name}</span>
+</h1>

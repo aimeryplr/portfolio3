@@ -11,6 +11,9 @@ import ProjectPreview from '../components/Projects/ProjectPreview.tsx';
 import Footer from '../components/Contact/Footer.astro';
 import Ocean from '../components/Dive/Ocean.astro';
 import DiveComputer from '../components/Dive/DiveComputer.astro';
+import DiveColumn from '../components/Dive/DiveColumn.astro';
+import HeroTitle from '../components/Dive/HeroTitle.astro';
+import StopHead from '../components/Dive/StopHead.astro';
 
 // The data store doesn't keep the file's order, so sort back to the order of projects.json
 const projectOrder = projectsData.map((project) => project.id);
@@ -22,17 +25,13 @@ const projectTypes = Object.values(ProjectType);
 
 <BaseLayout>
     <Ocean />
-    <main class="dive-column">
-        <section class="hero" data-stop="Surface">
-            <div class="prompt">aimery@portfolio:~$ <span class="prompt-command">dive --max-depth 40m</span> <span class="prompt-cursor"></span></div>
-            <h1>
-                <span class="hero-title">DÉVELOPPEUR FULL STACK</span>
-                <span class="hero-name">Aimery PELLERIN</span>
-            </h1>
+    <DiveColumn class="gap-[140px] pb-[140px]">
+        <section class="flex min-h-[88svh] flex-col justify-center gap-[22px] pt-[60px] [&_p]:max-w-[60ch] [&_p]:opacity-92" data-stop="Surface">
+            <HeroTitle title="DÉVELOPPEUR FULL STACK" name="Aimery PELLERIN"/>
             <p>Développer et relever des défis complexes en informatique me passionne. Chaque nouveau projet est une nouvelle opportunité pour apprendre et perfectionner mes compétences. Je me spécialise dans le développement Node.js, et plus particulièrement React / NestJS.</p>
             <p>Le niveau 1 de plongée sous marine en poche, j'aimerais parcourir le dessous des océans partout dans le monde, ce portfolio est à cette image.</p>
-            <div class="hero-links">
-                <a class="button button--primary cv-button" href="/aimery-pellerin-cv.pdf" download="Aimery-Pellerin-CV.pdf">
+            <div class="flex flex-wrap gap-2.5">
+                <a class="button button--primary" href="/aimery-pellerin-cv.pdf" download="Aimery-Pellerin-CV.pdf">
                     <FontAwesomeIcon icon={faDownload} className='w-3.5 h-3.5'/>
                     Télécharger mon CV
                 </a>
@@ -43,8 +42,8 @@ const projectTypes = Object.values(ProjectType);
                     <FontAwesomeIcon icon={faGithub} className='w-4 h-4'/>
                 </a>
             </div>
-            <div class="descend">
-                <FontAwesomeIcon icon={faArrowDown} className='w-3.5 h-3.5'/>
+            <div class="mt-[18px] flex items-center gap-2.5 font-mono text-[14px] text-muted">
+                <FontAwesomeIcon icon={faArrowDown} className='w-3.5 h-3.5 animate-sink motion-reduce:animate-none'/>
                 Projets
             </div>
         </section>
@@ -52,24 +51,22 @@ const projectTypes = Object.values(ProjectType);
         {projectTypes.map((projectType) => {
             const filteredProjects = projects.filter((project) => project.data.type === projectType);
             const sectionTitle = ProjectTypeNames[projectType];
-            // auto-fit stretches a lone card across the 888px column; otherwise two columns from 810px
-            const shotSizes = filteredProjects.length === 1
+            // two columns from 810px; with an odd count the first card spans the full 888px column so no row is left half empty
+            const isFeatured = (index: number) => index === 0 && filteredProjects.length % 2 === 1;
+            const shotSizes = (index: number) => isFeatured(index)
                 ? "(min-width: 920px) 842px, calc(100vw - 78px)"
                 : "(min-width: 920px) 389px, (min-width: 810px) calc(50vw - 71px), calc(100vw - 78px)";
 
             return (
-                <section class="stop" data-stop={sectionTitle}>
-                    <div class="stop-head">
-                        <h2>{sectionTitle}</h2>
-                        <span class="eyebrow" data-depth-label></span>
-                    </div>
-                    <div class="stop-grid">
-                        {filteredProjects.map((project) => (
-                            <div id={slugify(project.id)} class="flex">
+                <section class="flex flex-col gap-[22px]" data-stop={sectionTitle}>
+                    <StopHead title={sectionTitle}/>
+                    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] gap-[18px]">
+                        {filteredProjects.map((project, index) => (
+                            <div id={slugify(project.id)} class:list={["flex", isFeatured(index) && "col-span-full"]}>
                                 <ProjectPreview project={project.data}>
-                                    <Image slot="shot" class="shot-img" src={project.data.preview} alt={project.data.name}
+                                    <Image slot="shot" class="absolute inset-0 size-full object-cover object-top" src={project.data.preview} alt={project.data.name}
                                            width={1920} widths={[480, 960, 1440, 1920]} quality={project.data.previewQuality}
-                                           sizes={shotSizes}/>
+                                           sizes={shotSizes(index)}/>
                                 </ProjectPreview>
                             </div>
                         ))}
@@ -77,7 +74,7 @@ const projectTypes = Object.values(ProjectType);
                 </section>
             );
         })}
-    </main>
+    </DiveColumn>
     <Footer />
     <DiveComputer />
 </BaseLayout>

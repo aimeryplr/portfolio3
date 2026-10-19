@@ -1,10 +1,11 @@
 import { mix, rgb, scale, smooth, type RGB } from "./palette.ts";
 import { ROCK, drawCoral, makeCoral, pick, reefColor, reseed, rnd, torchAt, type Coral, type CoralType, type P } from "./reef.ts";
 import { diver, drawDiver } from "./diver.ts";
+import { drawLantern, lantern, lanternAt, warm } from "./lantern.ts";
 import { ctx, stage, tri, waterAtY } from "./stage.ts";
 
 // A seabed under the contact section ([data-seabed]) that spans the whole width,
-// with an old anchor and amphoras lying on its banks.
+// with an old anchor and amphoras lying on its banks, and a lantern still burning under the form.
 // Same low-poly facets as the reef wall, in page coordinates. It sits right next to the content,
 // so the water is allowed to dim it less than the wall: colour is absorbed as if no deeper than SHALLOW.
 
@@ -91,7 +92,7 @@ function amphora(x: number, y: number, size: number, angle: number) {
 function seabed(el: HTMLElement) {
   const { W } = stage;
   const r = el.getBoundingClientRect(), top = r.top + scrollY, bottom = r.bottom + scrollY;
-  const card = el.querySelector(".card")?.getBoundingClientRect();
+  const card = el.querySelector("[data-card]")?.getBoundingClientRect();
   const cl = card ? card.left - 30 : W / 2, cr = card ? card.right + 30 : W / 2;
   const bankH = Math.min(300, (bottom - top) * 0.55);
   const floor = bottom - 26, base = bottom + 40;
@@ -162,6 +163,12 @@ function seabed(el: HTMLElement) {
     const half = diver.size * 0.15;
     diver.y = Math.max(yAt(diver.x - half), yAt(diver.x), yAt(diver.x + half)) + 4;
   }
+  // the lantern, set down on the flat sand under the form, a little right of its middle
+  lantern.on = !!card;
+  if (card) {
+    lantern.x = (cl + cr) / 2 + (cr - cl) * 0.2;
+    lantern.y = yAt(lantern.x) + 3;
+  }
   // wreckage of past dives, only where there is room beside the form and the diver
   const lx = fl - (fl < cl ? 110 : 170), rx = fr + (fr > cr ? 110 : 170);
   if (lx > 70) anchor(lx, yAt(lx) + 8, Math.min(110, bankH * 0.6), -0.55);
@@ -186,11 +193,17 @@ export function drawOutcrops(time: number) {
   g.lineWidth = 1;
   for (const [a, b, c, base, sh, cy] of facets) {
     if (cy < top || cy > bottom) continue;
-    const l = torchAt((a[0] + b[0] + c[0]) / 3, cy) * 0.85;
+    const fx = (a[0] + b[0] + c[0]) / 3, l = torchAt(fx, cy) * 0.85, w = lanternAt(fx, cy, time) * 0.8;
     const k = 0.78 + l * 0.22;
-    tri(a, b, c, rgb(mix(waterAtY(cy - scrollY), scale(reefColor(base, cy, l, SHALLOW), sh * (1 + l * 0.4)), k)));
+    const col = mix(waterAtY(cy - scrollY), scale(reefColor(base, cy, l, SHALLOW), sh * (1 + l * 0.4)), k);
+    tri(a, b, c, rgb(w ? warm(col, w) : col));
   }
   for (const { c, dir } of corals) if (c.y >= top && c.y <= bottom) drawCoral(c, dir, time, 0.8, SHALLOW);
+  if (lantern.on && lantern.y - lantern.size * 5 <= bottom && lantern.y + lantern.size * 5 >= top) {
+    // held as bright as the diver: it sits by the content, and its own flame lights it
+    const wc = waterAtY(lantern.y - scrollY);
+    drawLantern(time, (c) => mix(wc, reefColor(c, lantern.y, 0.5, SHALLOW), 0.88));
+  }
   if (diver.on && diver.y >= top && diver.y - diver.size <= bottom) {
     // absorbed like the sand around him, so he belongs to the same depth, but held a little brighter than it
     const cy = diver.y - diver.size / 2, l = torchAt(diver.x, cy) * 0.85, k = 0.86 + l * 0.14, wc = waterAtY(cy - scrollY);
