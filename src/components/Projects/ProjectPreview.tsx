@@ -47,8 +47,8 @@ interface Props {
 export default function ProjectPreview({ project, shot }: Props) {
   return (
     <Card className="min-w-0 flex-1" render={(props) => <article {...props} />}>
-      <ProjectShot seed={project.name}>{shot}</ProjectShot>
-      <Card.Header className="flex-row items-center justify-between gap-4">
+      <ProjectShot seed={project.name + 5}>{shot}</ProjectShot>
+      <Card.Header className="flex-row items-baseline justify-between gap-4">
         <div>
           <Card.Title className="text-xl leading-7 font-bold">{project.name}</Card.Title>
           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">

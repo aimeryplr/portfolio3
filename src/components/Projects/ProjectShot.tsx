@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import { area, curveCatmullRom } from "d3-shape";
+import { area, curveCatmullRom, line } from "d3-shape";
 import { randomLcg } from "d3-random";
 
 interface Props {
@@ -56,11 +56,15 @@ const shape = area<Point>()
   .curve(curveCatmullRom)
   .digits(4);
 
+// the wave alone, along the same curve as the clip's bottom edge, for the outline
+const edge = line<Point>().curve(curveCatmullRom).digits(4);
+
 // the screenshot (an Astro <Image /> passed through a slot), bleeding to the card's edges and cut along a wave
 export default function ProjectShot({ children, seed }: Props) {
   // one clip path per card, so the ids don't collide on the page (React 19.2 ids like _R_0_ need no escaping in url())
   const clipId = useId();
-  const clip = shape(wavePoints(randomLcg(hash(seed)))) ?? "";
+  const points = wavePoints(randomLcg(hash(seed)));
+  const clip = shape(points) ?? "";
   return (
     // the negative margins undo the card padding set on .card in global.css
     <div className="relative -mx-[22px] -mt-[22px] aspect-[3324/1696] rounded-[inherit]">
@@ -72,6 +76,10 @@ export default function ProjectShot({ children, seed }: Props) {
       <div className="absolute inset-0 overflow-hidden rounded-[inherit] bg-accent/5" style={{ clipPath: `url(#${clipId})` }}>
         {children}
       </div>
+      {/* stretched over the box like the clip; the stroke keeps its width however the box is scaled */}
+      <svg className="pointer-events-none absolute inset-0 size-full overflow-visible" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">
+        <path d={edge(points) ?? ""} className="fill-none stroke-accent" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+      </svg>
     </div>
   );
 }
