@@ -76,7 +76,20 @@
     }
 }
 
-/* every button: a small mono label, filled accent that lifts and glows, or an outline that tints */
+/* the water in the accent button: the wave tile drifts sideways and rises from below the button */
+@property --wave-x {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+}
+@property --wave-y {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: -100%;
+}
+
+/* every button: a small mono label, an accent outline that floods and glows, or a plain outline that tints.
+   Hovering the accent one fills it with water, pressing it sends out a sonar ping (the class is set in BaseLayout) */
 @layer components {
     .button {
         /* translate is separate from HeroUI's press scale on transform, so both apply */
@@ -85,17 +98,73 @@
             translate 200ms var(--ease-out),
             background-color 100ms var(--ease-out),
             border-color 200ms var(--ease-out),
-            box-shadow 200ms var(--ease-out);
+            box-shadow 200ms var(--ease-out),
+            color 400ms var(--ease-out);
         @apply motion-reduce:transition-none;
     }
+    /* the fill is the wave below, so the button itself stays see-through */
     .button--primary {
-        --button-bg-hover: var(--accent);
-        --button-bg-pressed: var(--accent);
+        --button-bg: transparent;
+        --button-bg-hover: transparent;
+        --button-bg-pressed: transparent;
+        --button-fg: var(--accent);
         @apply border border-accent;
     }
     .button--primary:hover,
     .button--primary:focus-visible {
+        --button-fg: var(--accent-foreground);
         @apply -translate-y-px shadow-[0_0_18px_2px_color-mix(in_oklab,var(--accent)_45%,transparent)];
+    }
+    /* the water: the wave tile is twice the button's height, its crest starts just below the bottom edge.
+       It covers the border too, so its corners match the border's outer curve and leave no sliver. Being its own
+       box keeps it inside the button, so no overflow clip that would also cut the ping */
+    .button--primary::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        z-index: -1;
+        border-radius: inherit;
+        pointer-events: none;
+        background-color: var(--accent);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100' preserveAspectRatio='none'%3E%3Cpath d='M0 7Q10 0 20 7T40 7V100H0Z'/%3E%3C/svg%3E") var(--wave-x) var(--wave-y) / 12rem 200% repeat-x;
+        transition: --wave-y 600ms var(--ease-out);
+        /* always running, so the wave keeps sliding while it drains too */
+        animation: wave-drift 500ms linear infinite;
+        @apply motion-reduce:transition-none motion-reduce:animate-none;
+    }
+    .button--primary:hover::before,
+    .button--primary:focus-visible::before {
+        --wave-y: 25%;
+    }
+    /* two rings: the pseudo-element's outline, then the button's own a beat later */
+    .button--primary::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        pointer-events: none;
+        outline: 1px solid var(--accent);
+        opacity: 0;
+    }
+    .button--pinging::after {
+        animation: sonar 900ms var(--ease-out);
+        @apply motion-reduce:animate-none;
+    }
+    .button--pinging {
+        animation: sonar-outline 900ms var(--ease-out) 200ms;
+        @apply motion-reduce:animate-none;
+    }
+    @keyframes wave-drift {
+        to { --wave-x: 12rem; }
+    }
+    @keyframes sonar {
+        from { opacity: 0.9; outline-offset: 0; }
+        to { opacity: 0; outline-offset: 16px; }
+    }
+    /* outline-style is in the frames because HeroUI turns the outline off on focus */
+    @keyframes sonar-outline {
+        from { outline: 1px solid var(--accent); outline-offset: 0; }
+        to { outline: 1px solid transparent; outline-offset: 16px; }
     }
     .button--outline {
         --button-fg: var(--accent);

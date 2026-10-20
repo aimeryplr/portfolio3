@@ -82,5 +82,19 @@ const structuredData = {
 </head>
 <body class="bg-background text-foreground w-full min-h-svh overflow-x-hidden">
     <slot/>
+    <script>
+        // the sonar ping on an accent button press, see .button--pinging in global.css. Removing the class and forcing
+        // a reflow replays it on every click, even mid-ping
+        document.addEventListener("click", (event) => {
+            const button = (event.target as Element).closest<HTMLElement>(".button--primary");
+            if (!button) return;
+            button.classList.remove("button--pinging");
+            void button.offsetWidth;
+            button.classList.add("button--pinging");
+        });
+        document.addEventListener("animationend", (event) => {
+            if (event.animationName === "sonar-outline") (event.target as Element).classList.remove("button--pinging");
+        });
+    </script>
 </body>
 </html>
